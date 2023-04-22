@@ -50,7 +50,7 @@ export default function SignUp() {
   };
 
   return (
-    <PageLayout>
+    <PageLayout title="Sign-Up to SportsCentral">
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
@@ -65,7 +65,7 @@ export default function SignUp() {
           <Input
             type="email"
             placeholder="<your email>"
-            borderRadius={0}
+            rounded="none"
             {...register('email')}
           />
           <FormErrorMessage>
@@ -77,7 +77,7 @@ export default function SignUp() {
           <Input
             type="text"
             placeholder="<your name>"
-            borderRadius={0}
+            rounded="none"
             {...register('name')}
           />
           <FormErrorMessage>
@@ -89,7 +89,7 @@ export default function SignUp() {
           <Input
             type="password"
             placeholder="password"
-            borderRadius={0}
+            rounded="none"
             {...register('password')}
           />
           <FormErrorMessage>
@@ -101,7 +101,7 @@ export default function SignUp() {
           <Input
             type="password"
             placeholder="confirm"
-            borderRadius={0}
+            rounded="none"
             {...register('confirmPassword')}
           />
           <FormErrorMessage>

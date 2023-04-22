@@ -42,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <PageLayout>
+    <PageLayout title="Login">
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
@@ -73,7 +73,7 @@ export default function Login() {
           <Input
             type="email"
             placeholder="Email"
-            borderRadius={0}
+            rounded="none"
             {...register('email')}
           />
           <FormErrorMessage>
@@ -85,7 +85,7 @@ export default function Login() {
           <Input
             type="password"
             placeholder="Password"
-            borderRadius={0}
+            rounded="none"
             {...register('password')}
           />
           <FormErrorMessage>
