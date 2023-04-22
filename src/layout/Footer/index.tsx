@@ -9,7 +9,7 @@ export function Footer() {
       direction="column"
       align="center"
       justify="center"
-      position="fixed"
+      position="relative"
       width="100%"
       height="100px"
       bottom="0"

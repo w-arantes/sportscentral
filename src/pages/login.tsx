@@ -12,11 +12,12 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { PageLayout } from '@/layout/PageLayout';
+import { PageLayout } from '@/layout';
 
 const loginFormSchema = z.object({
   email: z.string().nonempty('E-mail is required.'),
@@ -29,6 +30,8 @@ const loginFormSchema = z.object({
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function Login() {
+  const { push } = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -39,6 +42,8 @@ export default function Login() {
 
   const onSubmit = (credentials: LoginFormData) => {
     console.log('LOGIN', credentials);
+
+    push('/dashboard');
   };
 
   return (

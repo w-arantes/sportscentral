@@ -9,11 +9,12 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { PageLayout } from '@/layout/PageLayout';
+import { PageLayout } from '@/layout';
 
 const registerFormSchema = z
   .object({
@@ -44,9 +45,12 @@ export default function SignUp() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema)
   });
+  const { push } = useRouter();
 
   const onSubmit = (credentials: RegisterFormData) => {
     console.log('SIGN-UP', credentials);
+
+    push('/dashboard');
   };
 
   return (
