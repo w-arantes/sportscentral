@@ -1,11 +1,17 @@
 import { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 import { Flex, FlexProps } from '@chakra-ui/react';
 
+import { SEO } from '@/layout';
+
 interface PageLayoutProps extends FlexProps {
+  title: string;
   children: ReactNode;
 }
 
-export function PageLayout({ children, ...rest }: PageLayoutProps) {
+export function PageLayout({ children, title, ...rest }: PageLayoutProps) {
+  const { asPath } = useRouter();
+
   return (
     <Flex
       as="main"
@@ -17,6 +23,7 @@ export function PageLayout({ children, ...rest }: PageLayoutProps) {
       mt="4rem"
       {...rest}
     >
+      <SEO pageTitle={title} url={asPath} />
       {children}
     </Flex>
   );
