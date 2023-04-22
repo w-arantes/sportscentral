@@ -4,9 +4,11 @@ export const fonts = {
 };
 
 export const fontSizes = {
-  title: '3rem',
-  subtitle: '2.25rem',
-  h1: '1rem',
-  h2: '0.875rem',
-  h3: '0.75rem'
+  hero: '3rem',
+  section: '2.25rem',
+  title: '1.5rem',
+  h1: '1.25rem',
+  h2: '1rem',
+  h3: '0.875rem',
+  h4: '0.75rem'
 };

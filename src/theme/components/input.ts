@@ -5,12 +5,12 @@ export const Input: ComponentStyleConfig = {
     field: {
       width: '100%',
       height: '32px',
-      fontSize: 'h1',
+      fontSize: 'h3',
       fontWeight: 'normal',
       color: 'white',
       borderColor: 'red.900',
       _placeholder: {
-        fontSize: 'h1',
+        fontSize: 'h3',
         color: 'gray.light'
       }
     }
