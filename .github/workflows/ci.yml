@@ -25,16 +25,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: yarn
 
       - name: Check types
-        run: pnpm type-check
+        run: yarn type-check
 
       - name: Check linting
-        run: pnpm lint
+        run: yarn lint
 
       - name: Check commits messages
         uses: wagoid/commitlint-github-action@v5
