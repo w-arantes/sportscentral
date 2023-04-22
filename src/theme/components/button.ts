@@ -2,7 +2,7 @@ import { ComponentStyleConfig } from '@chakra-ui/react';
 
 export const Button: ComponentStyleConfig = {
   baseStyle: {
-    fontSize: 'h1',
+    fontSize: 'h2',
     fontWeight: 'bold',
     color: 'white',
     borderRadius: 0
