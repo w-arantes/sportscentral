@@ -17,7 +17,12 @@ export function Footer() {
       right="0"
       pt="1rem"
     >
-      <Img src="/branding/icon.svg" />
+      <Img
+        src="/branding/icon.svg"
+        alt="SportsCentral icon composed by a rectangle with brand primary color (green) and SportsCentral initials (S and C)."
+        w="40px"
+        h="40px"
+      />
       <Text mt="1rem">{`@ ${CURRENT_YEAR} SportsCentral`}</Text>
     </Flex>
   );

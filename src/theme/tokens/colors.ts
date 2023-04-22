@@ -10,5 +10,6 @@ export const colors = {
     light: '#C4C4CC'
   },
 
-  white: '#FFFF'
+  white: '#FFFF',
+  tag: 'rgba(209, 223, 50, 0.5);'
 };

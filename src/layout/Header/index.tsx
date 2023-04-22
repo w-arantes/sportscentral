@@ -17,7 +17,12 @@ export function Header() {
       right="0"
     >
       <Center>
-        <Img src="/branding/logo.svg" />
+        <Img
+          src="/branding/logo.svg"
+          alt="SportsCentral logo composed with typhography and icon"
+          w="100%"
+          h="100%"
+        />
       </Center>
     </Flex>
   );
