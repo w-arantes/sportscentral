@@ -19,7 +19,7 @@ export function PageLayout({ children, title, ...rest }: PageLayoutProps) {
       align="center"
       width="100%"
       height="100%"
-      px="112px"
+      px="146px"
       mt="4rem"
       {...rest}
     >

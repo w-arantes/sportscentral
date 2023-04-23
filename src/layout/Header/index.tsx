@@ -43,9 +43,9 @@ export function Header() {
                 <Tooltip label="Manage users and events" openDelay={500}>
                   <Button
                     variant="header"
-                    onClick={() => push('/dashboard/manage')}
+                    onClick={() => push('/dashboard/users')}
                   >
-                    MANAGE
+                    USERS
                   </Button>
                 </Tooltip>
               )}
