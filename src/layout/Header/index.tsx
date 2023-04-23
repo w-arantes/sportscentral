@@ -1,10 +1,19 @@
 import { useRouter } from 'next/router';
-import { Flex, HStack, Img, Tooltip, Avatar, Button } from '@chakra-ui/react';
+import {
+  Flex,
+  HStack,
+  Img,
+  Tooltip,
+  Avatar,
+  Button,
+  IconButton
+} from '@chakra-ui/react';
+import { SignOut } from '@phosphor-icons/react';
 
 import { useAuth } from '@/contexts';
 
 export function Header() {
-  const { isAuthenticated, credentials } = useAuth();
+  const { isAuthenticated, credentials, signOut } = useAuth();
   const { push } = useRouter();
 
   return (
@@ -40,21 +49,38 @@ export function Header() {
                 </Button>
               </Tooltip>
               {credentials?.isAdmin && (
-                <Tooltip label="Manage users and events" openDelay={500}>
-                  <Button
-                    variant="header"
-                    onClick={() => push('/dashboard/users')}
-                  >
-                    USERS
-                  </Button>
-                </Tooltip>
+                <>
+                  <Tooltip label="Manage users" openDelay={500}>
+                    <Button
+                      variant="header"
+                      onClick={() => push('/dashboard/admin/users')}
+                    >
+                      USERS
+                    </Button>
+                  </Tooltip>
+                  <Tooltip label="Manage events" openDelay={500}>
+                    <Button
+                      variant="header"
+                      onClick={() => push('/dashboard/admin/events')}
+                    >
+                      EVENTS
+                    </Button>
+                  </Tooltip>
+                </>
               )}
-              {credentials && (
-                <Avatar
-                  name={`${credentials.name + ' ' + credentials.surname}`}
-                  bg="brand.light"
+              <Tooltip label="Sign-out" openDelay={500}>
+                <IconButton
+                  variant="unstyled"
+                  size="md"
+                  aria-label="Sign-Out"
+                  icon={<SignOut size={20} color="#F75A68" />}
+                  onClick={signOut}
                 />
-              )}
+              </Tooltip>
+              <Avatar
+                name={`${credentials?.name + ' ' + credentials?.surname}`}
+                bg="brand.light"
+              />
             </>
           ) : (
             <Tooltip label="Log-in into SportsCentral" openDelay={500}>

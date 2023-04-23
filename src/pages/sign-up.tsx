@@ -1,3 +1,9 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 import {
   Button,
   Text,
@@ -9,12 +15,8 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 
-import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
 import { PageLayout } from '@/layout';
+import { useAuth } from '@/contexts';
 
 const registerFormSchema = z
   .object({
@@ -39,6 +41,9 @@ const registerFormSchema = z
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 export default function SignUp() {
+  const { isAuthenticated } = useAuth();
+  const { push } = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -46,7 +51,12 @@ export default function SignUp() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema)
   });
-  const { push } = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      push('/dashboard');
+    }
+  }, [isAuthenticated]);
 
   const onSubmit = (credentials: RegisterFormData) => {
     console.log('SIGN-UP', credentials);

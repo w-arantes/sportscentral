@@ -1,4 +1,10 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 import {
   Button,
   Text,
@@ -11,11 +17,6 @@ import {
   FormErrorMessage,
   FormLabel
 } from '@chakra-ui/react';
-
-import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
@@ -31,8 +32,14 @@ const loginFormSchema = z.object({
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function Login() {
+  const { signIn, isAuthenticated } = useAuth();
   const { push } = useRouter();
-  const { signIn } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      push('/dashboard');
+    }
+  }, [isAuthenticated]);
 
   const {
     register,

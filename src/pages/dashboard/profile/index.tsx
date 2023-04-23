@@ -1,3 +1,9 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 import {
   Button,
   Flex,
@@ -8,9 +14,6 @@ import {
   Input,
   Text
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
@@ -39,6 +42,7 @@ type ProfileFormData = z.infer<typeof userCredentialsFormSchema>;
 
 export default function ProfileSettings() {
   const { isAuthenticated, credentials, updateProfileData } = useAuth();
+  const { push } = useRouter();
   const {
     register,
     handleSubmit,
@@ -46,6 +50,12 @@ export default function ProfileSettings() {
   } = useForm<ProfileFormData>({
     resolver: zodResolver(userCredentialsFormSchema)
   });
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      push('/login');
+    }
+  }, [isAuthenticated]);
 
   const onSubmit = (newData: ProfileFormData) => {
     const { email, name, surname, password } = newData;

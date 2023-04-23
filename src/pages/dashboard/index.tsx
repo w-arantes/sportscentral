@@ -1,14 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+
 import { PageLayout, Section } from '@/layout';
 import { CategoryCard } from '@/components/Categories';
 import { EventCard } from '@/components/Event';
-
 import { CategoryEntity, EventEntity } from '@/entities';
+import { useAuth } from '@/contexts';
 
 import { events, categories } from '@/mock';
 
 export default function Dashboard() {
+  const { isAuthenticated } = useAuth();
+  const { push } = useRouter();
+
   const [isFetchingData] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      push('/login');
+    }
+  }, [isAuthenticated]);
 
   return (
     <PageLayout title="Dashboard | SportsCentral" mt="1rem">

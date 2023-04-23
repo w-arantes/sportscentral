@@ -48,6 +48,7 @@ export const Button: ComponentStyleConfig = {
     },
 
     header: {
+      width: '100px',
       color: 'gray.light',
       fontWeight: 'normal',
       _hover: {

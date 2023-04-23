@@ -38,7 +38,7 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [credentials, setCredentials] = useState<UserEntity | null>(null);
+  const [credentials, setCredentials] = useState<UserCredentials | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const { push } = useRouter();
@@ -65,15 +65,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     email,
     isAdmin
   }: UserCredentials) => {
-    const credentials = JSON.stringify({
+    const credentials = {
       id,
       name,
       surname,
       email,
       isAdmin
-    });
+    };
 
-    setCookie(undefined, USER_CREDENTIALS_KEY, credentials, {
+    setCredentials(credentials);
+    setCookie(undefined, USER_CREDENTIALS_KEY, JSON.stringify(credentials), {
       maxAge: COOKIE_MAX_AGE,
       path: '/'
     });
@@ -113,7 +114,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signOut = () => {
     clearSession();
-    push('/');
+    push('/login');
   };
 
   return (

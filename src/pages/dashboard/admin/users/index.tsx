@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Button,
   IconButton,
@@ -15,9 +17,21 @@ import {
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
 import { PageLayout } from '@/layout';
+import { useAuth } from '@/contexts';
 import { users } from '@/mock';
 
 export default function ManageUsers() {
+  const { isAuthenticated, credentials } = useAuth();
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated && !credentials?.isAdmin) {
+      push('/dashboard');
+    } else if (!isAuthenticated) {
+      push('/login');
+    }
+  }, [isAuthenticated, credentials]);
+
   const handleRegisterNew = () => {
     console.log('handleRegisterNew');
   };
