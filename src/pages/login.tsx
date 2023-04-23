@@ -21,7 +21,7 @@ import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
 
 const loginFormSchema = z.object({
-  email: z.string().nonempty('E-mail is required.'),
+  email: z.string().nonempty('E-mail is required.').email('Invalid E-mail.'),
   password: z
     .string()
     .nonempty('Password is required.')

@@ -7,8 +7,6 @@ export function Header() {
   const { isAuthenticated, credentials } = useAuth();
   const { push } = useRouter();
 
-  console.log(credentials);
-
   return (
     <Flex
       as="header"
@@ -51,7 +49,12 @@ export function Header() {
                   </Button>
                 </Tooltip>
               )}
-              <Avatar name={credentials?.name} bg="brand.light" />
+              {credentials && (
+                <Avatar
+                  name={`${credentials.name + ' ' + credentials.surname}`}
+                  bg="brand.light"
+                />
+              )}
             </>
           ) : (
             <Tooltip label="Log-in into SportsCentral" openDelay={500}>

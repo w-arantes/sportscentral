@@ -20,6 +20,7 @@ const registerFormSchema = z
   .object({
     email: z.string().nonempty('Email is required').email('Invalid Email'),
     name: z.string().nonempty('Name is required.'),
+    surname: z.string().nonempty('Surname is required.'),
     password: z
       .string()
       .nonempty('Password is required.')
@@ -86,6 +87,18 @@ export default function SignUp() {
           />
           <FormErrorMessage>
             {errors.name && errors.name.message}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={Boolean(errors.surname)}>
+          <FormLabel>Surname</FormLabel>
+          <Input
+            type="text"
+            placeholder="<surname>"
+            rounded="none"
+            {...register('surname')}
+          />
+          <FormErrorMessage>
+            {errors.surname && errors.surname.message}
           </FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={Boolean(errors.password)}>
