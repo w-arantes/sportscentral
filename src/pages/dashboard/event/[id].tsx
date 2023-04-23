@@ -4,6 +4,7 @@ import { Button, Flex, HStack, Img } from '@chakra-ui/react';
 import { PageLayout } from '@/layout';
 import { EventEntity } from '@/entities';
 import { EventBreadcrumb, EventFollowers, EventInfo } from '@/components/Event';
+import { useAuth } from '@/contexts';
 
 import { events } from '@/mock';
 
@@ -16,12 +17,18 @@ export default function EventPage({
   followers,
   location
 }: EventEntity) {
+  const { isAuthenticated, credentials } = useAuth();
+
   const handleEditEvent = () => {
     console.log('EDIT EVENT');
   };
 
   const handleFollowEvent = () => {
-    console.log('FOLLOW EVENT');
+    if (!isAuthenticated) {
+      //TODO: suggest login modal
+    } else {
+      console.log('FOLLOW EVENT');
+    }
   };
 
   return (
@@ -54,9 +61,12 @@ export default function EventPage({
         <Button variant="solid" onClick={handleFollowEvent}>
           FOLLOW EVENT
         </Button>
-        <Button variant="outline" onClick={handleEditEvent}>
-          EDIT EVENT
-        </Button>
+
+        {credentials?.isAdmin && (
+          <Button variant="outline" onClick={handleEditEvent}>
+            EDIT EVENT
+          </Button>
+        )}
       </HStack>
 
       <EventFollowers followers={followers} />

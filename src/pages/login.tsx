@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { PageLayout } from '@/layout';
+import { useAuth } from '@/contexts';
 
 const loginFormSchema = z.object({
   email: z.string().nonempty('E-mail is required.'),
@@ -31,6 +32,7 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function Login() {
   const { push } = useRouter();
+  const { signIn } = useAuth();
 
   const {
     register,
@@ -42,6 +44,7 @@ export default function Login() {
 
   const onSubmit = (credentials: LoginFormData) => {
     console.log('LOGIN', credentials);
+    signIn(credentials);
 
     push('/dashboard');
   };

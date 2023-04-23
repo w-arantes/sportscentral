@@ -11,7 +11,7 @@ export default function Dashboard() {
   const [isFetchingData] = useState<boolean>(false);
 
   return (
-    <PageLayout title="Dashboard" mt="1rem">
+    <PageLayout title="Dashboard | SportsCentral" mt="1rem">
       <Section title="Following" isLoading={isFetchingData}>
         {events &&
           events.map((event: EventEntity) => {

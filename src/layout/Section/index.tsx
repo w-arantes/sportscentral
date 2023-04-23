@@ -36,19 +36,19 @@ export function Section({
             <>
               {isLoadingCategories ? (
                 <>
-                  <Skeleton minWidth="296px" height="40px" />
-                  <Skeleton minWidth="296px" height="40px" />
-                  <Skeleton minWidth="296px" height="40px" />
-                  <Skeleton minWidth="296px" height="40px" />
-                  <Skeleton minWidth="296px" height="40px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="40px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="40px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="40px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="40px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="40px" />
                 </>
               ) : (
                 <>
-                  <Skeleton minWidth="296px" height="296px" />
-                  <Skeleton minWidth="296px" height="296px" />
-                  <Skeleton minWidth="296px" height="296px" />
-                  <Skeleton minWidth="296px" height="296px" />
-                  <Skeleton minWidth="296px" height="296px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="296px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="296px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="296px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="296px" />
+                  <Skeleton fadeDuration={1} minWidth="296px" height="296px" />
                 </>
               )}
             </>
