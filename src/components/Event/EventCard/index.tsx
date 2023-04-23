@@ -2,8 +2,8 @@ import NextLink from 'next/link';
 import { Flex, Box, Text, Img, Link, Stack, Tooltip } from '@chakra-ui/react';
 import { CalendarBlank, MapPin, Heart } from '@phosphor-icons/react';
 
-import { EventProps } from '@/entities';
-import { CategoryTag } from '../Categories';
+import { EventEntity } from '@/entities';
+import { CategoryTag } from '@/components/Categories';
 
 export function EventCard({
   id,
@@ -12,11 +12,11 @@ export function EventCard({
   date,
   location,
   followers
-}: EventProps) {
+}: EventEntity) {
   return (
     <Link
       as={NextLink}
-      href={`/event/${id}`}
+      href={`/dashboard/event/${id}`}
       _hover={{
         textDecoration: 'none'
       }}
@@ -66,7 +66,10 @@ export function EventCard({
             </Flex>
             <Flex direction="row" align="center" justify="flex-start">
               <Heart size={20} color="#00875F" />
-              <Text fontSize="h3" ml="0.5rem">{`${followers} Following`}</Text>
+              <Text
+                fontSize="h3"
+                ml="0.5rem"
+              >{`${followers?.length} Following`}</Text>
             </Flex>
             <Flex direction="row" align="center" justify="flex-start">
               <CategoryTag name={category} />

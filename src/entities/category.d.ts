@@ -1,4 +1,4 @@
-export interface CategoryProps {
+export interface CategoryEntity {
   id: string;
   name: string;
 }

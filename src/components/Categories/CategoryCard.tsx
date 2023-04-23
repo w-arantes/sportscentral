@@ -1,10 +1,10 @@
 import NextLink from 'next/link';
 import { Link, Tooltip } from '@chakra-ui/react';
-import { CategoryProps } from '@/entities';
+import { CategoryEntity } from '@/entities';
 
 import { CategoryTag } from './CategoryTag';
 
-export function CategoryCard({ id, name }: CategoryProps) {
+export function CategoryCard({ id, name }: CategoryEntity) {
   return (
     <Link
       as={NextLink}

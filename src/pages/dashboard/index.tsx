@@ -1,16 +1,20 @@
+import { useState } from 'react';
 import { PageLayout, Section } from '@/layout';
 import { CategoryCard } from '@/components/Categories';
-import { EventCard } from '@/components/EventCard';
+import { EventCard } from '@/components/Event';
 
-import { CategoryProps, EventProps } from '@/entities';
+import { CategoryEntity, EventEntity } from '@/entities';
+
 import { events, categories } from '@/mock';
 
 export default function Dashboard() {
+  const [isFetchingData] = useState<boolean>(false);
+
   return (
     <PageLayout title="Dashboard" mt="1rem">
-      <Section title="Following" isLoading={!events}>
+      <Section title="Following" isLoading={isFetchingData}>
         {events &&
-          events.map((event: EventProps) => {
+          events.map((event: EventEntity) => {
             return (
               <EventCard
                 key={event.id}
@@ -24,9 +28,9 @@ export default function Dashboard() {
             );
           })}
       </Section>
-      <Section title="Events" isLoading={!events}>
+      <Section title="Events" isLoading={isFetchingData}>
         {events &&
-          events.map((event: EventProps) => {
+          events.map((event: EventEntity) => {
             return (
               <EventCard
                 key={event.id}
@@ -40,9 +44,9 @@ export default function Dashboard() {
             );
           })}
       </Section>
-      <Section title="Categories" isLoadingCategories={!categories}>
+      <Section title="Categories" isLoadingCategories={isFetchingData}>
         {categories &&
-          categories.map((category: CategoryProps) => {
+          categories.map((category: CategoryEntity) => {
             return (
               <CategoryCard
                 key={category.id}
