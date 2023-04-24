@@ -55,43 +55,19 @@ export function Header() {
               {credentials?.isAdmin && (
                 <Menu>
                   <MenuButton>MANAGE</MenuButton>
-                  <MenuList bg="gray.medium">
+                  <MenuList>
                     <Tooltip label="Manage Users" openDelay={1000}>
-                      <MenuItem
-                        as="a"
-                        href="/dashboard/admin/users"
-                        bg="gray.medium"
-                        _hover={{
-                          bg: 'brand.primary',
-                          color: 'white'
-                        }}
-                      >
+                      <MenuItem as="a" href="/dashboard/admin/users">
                         USERS
                       </MenuItem>
                     </Tooltip>
                     <Tooltip label="Manage Events" openDelay={1000}>
-                      <MenuItem
-                        as="a"
-                        href="/dashboard/admin/events"
-                        bg="gray.medium"
-                        _hover={{
-                          bg: 'brand.primary',
-                          color: 'white'
-                        }}
-                      >
+                      <MenuItem as="a" href="/dashboard/admin/events">
                         EVENTS
                       </MenuItem>
                     </Tooltip>
                     <Tooltip label="Manage Categories" openDelay={1000}>
-                      <MenuItem
-                        as="a"
-                        href="/dashboard/admin/categories"
-                        bg="gray.medium"
-                        _hover={{
-                          bg: 'brand.primary',
-                          color: 'white'
-                        }}
-                      >
+                      <MenuItem as="a" href="/dashboard/admin/categories">
                         CATEGORIES
                       </MenuItem>
                     </Tooltip>
