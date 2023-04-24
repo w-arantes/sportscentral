@@ -2,7 +2,7 @@ import NextLink from 'next/link';
 import { Flex, Box, Text, Img, Link, Stack, Tooltip } from '@chakra-ui/react';
 import { CalendarBlank, MapPin, Heart } from '@phosphor-icons/react';
 
-import { EventEntity } from '@/entities';
+import { EventEntity } from '@/domain/models';
 import { formatDateRange } from '@/helpers';
 import { CategoryTag } from '@/components/Categories';
 

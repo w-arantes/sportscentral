@@ -1,25 +1,56 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import { useAuth } from '@/contexts';
+import { CategoryEntity, EventEntity } from '@/domain/models';
+import { getAllEvents } from '@/domain/usecases/events';
+import { getAllCategories } from '@/domain/usecases/categories';
+
 import { PageLayout, Section } from '@/layout';
 import { CategoryCard } from '@/components/Categories';
 import { EventCard } from '@/components/Event';
-import { CategoryEntity, EventEntity } from '@/entities';
-import { useAuth } from '@/contexts';
-
-import { events, categories } from '@/mock';
 
 export default function Dashboard() {
   const { isAuthenticated } = useAuth();
   const { push } = useRouter();
 
-  const [isFetchingData] = useState<boolean>(false);
+  const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
+  const [events, setEvents] = useState<EventEntity[] | null>(null);
+  const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
       push('/login');
     }
   }, [isAuthenticated]);
+
+  const getCategoriesData = async () => {
+    const response = await getAllCategories();
+
+    if (response) {
+      setCategories(response);
+    }
+  };
+
+  const getEventsData = async () => {
+    const response = await getAllEvents();
+
+    if (response) {
+      setEvents(response);
+    }
+  };
+
+  const getDashboardData = async () => {
+    setIsFetchingData(true);
+
+    Promise.all([getEventsData(), getCategoriesData()]).finally(() => {
+      setIsFetchingData(false);
+    });
+  };
+
+  useEffect(() => {
+    getDashboardData();
+  }, []);
 
   return (
     <PageLayout title="Dashboard | SportsCentral">

@@ -8,8 +8,8 @@ import {
 import { useRouter } from 'next/router';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 
-import { PLATFORM_SETTINGS } from '@/config';
-import { UserEntity } from '@/entities';
+import { PLATFORM_SETTINGS } from '@/infra/config';
+import { UserEntity } from '@/domain/models';
 import { mockUserCredentials } from '@/mock/userCredentials';
 
 type UserCredentials = Omit<UserEntity, 'events'>;

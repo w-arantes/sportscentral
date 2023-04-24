@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Button,
@@ -20,15 +20,26 @@ import {
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
-import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
-import { users } from '@/mock';
-import { ConfirmDeleteModal } from '@/components/Modal';
+import { UserEntity } from '@/domain/models';
+import { getAllUsers, deleteUser } from '@/domain/usecases/users';
+import { PageLayout } from '@/layout';
+// import { ConfirmDeleteModal } from '@/components/Modal';
 
 export default function ManageUsers() {
   const { isAuthenticated, credentials } = useAuth();
   const { push } = useRouter();
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  // const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+
+  const [users, setUsers] = useState<UserEntity[] | null>(null);
+
+  const getUsersData = async () => {
+    const response = await getAllUsers();
+
+    if (response) {
+      setUsers(response);
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated && !credentials?.isAdmin) {
@@ -38,6 +49,10 @@ export default function ManageUsers() {
     }
   }, [isAuthenticated, credentials]);
 
+  useEffect(() => {
+    getUsersData();
+  }, []);
+
   const handleRegisterNew = () => {
     console.log('handleRegisterNew');
   };
@@ -46,9 +61,13 @@ export default function ManageUsers() {
     console.log('handleEditUser');
   };
 
-  const handleDelete = () => {
-    console.log('handleDelete');
-    onToggle;
+  const handleDeleteUser = async (userId: string) => {
+    const response = await deleteUser(userId);
+    console.log(response);
+
+    getUsersData();
+
+    //TODO: add visual feedback and update users action
   };
 
   return (
@@ -126,21 +145,21 @@ export default function ManageUsers() {
                             size="md"
                             aria-label="Delete User"
                             icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={onOpen}
+                            onClick={() => handleDeleteUser(user.id)}
                           />
                         </Tooltip>
                       </Td>
                     </Tr>
                   );
                 })}
-              <ConfirmDeleteModal
+              {/* <ConfirmDeleteModal
                 dialogText="Are you sure you want to delete the user?"
                 confirmLabel="YES"
                 cancelLabel="NO"
                 onConfirm={handleDelete}
                 closeDialog={onClose}
                 dialogState={isOpen}
-              />
+              /> */}
             </Tbody>
           </Table>
         </TableContainer>

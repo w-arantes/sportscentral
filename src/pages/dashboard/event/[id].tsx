@@ -1,13 +1,13 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { Button, Flex, HStack, Img } from '@chakra-ui/react';
 
-import { PageLayout } from '@/layout';
-import { EventEntity } from '@/entities';
-import { EventBreadcrumb, EventFollowers, EventInfo } from '@/components/Event';
 import { useAuth } from '@/contexts';
-
-import { events } from '@/mock';
+import { EventEntity } from '@/domain/models';
+import { getEvent, getAllEvents } from '@/domain/usecases/events';
 import { formatDateRange } from '@/helpers';
+
+import { PageLayout } from '@/layout';
+import { EventBreadcrumb, EventFollowers, EventInfo } from '@/components/Event';
 
 export default function EventPage({
   id,
@@ -77,6 +77,8 @@ export default function EventPage({
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const events = await getAllEvents();
+
   const paths = events?.map((event: EventEntity) => {
     return {
       params: { id: event.id }
@@ -91,7 +93,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params?.id as string;
-  const event = events.find((event: EventEntity) => event.id === id);
+  const event = await getEvent(id);
 
   return {
     props: {

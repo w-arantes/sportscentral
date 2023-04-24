@@ -32,7 +32,13 @@ export function Section({
         </Text>
       </Flex>
 
-      <Flex direction="row" align="center" justify="center" mt="1rem" mb="1rem">
+      <Flex
+        direction="row"
+        align="center"
+        justify="flex-start"
+        mt="1rem"
+        mb="1rem"
+      >
         <Stack direction="row" spacing="2rem">
           {isLoading || isLoadingCategories ? (
             <>

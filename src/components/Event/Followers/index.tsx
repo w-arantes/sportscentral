@@ -1,4 +1,4 @@
-import { UserEntity } from '@/entities';
+import { UserEntity } from '@/domain/models';
 import { Flex, VStack, Text } from '@chakra-ui/react';
 
 interface EventFollowers {

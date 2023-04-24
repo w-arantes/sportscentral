@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Button,
@@ -13,7 +13,6 @@ import {
   Thead,
   Tr,
   Tooltip,
-  useDisclosure,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink
@@ -21,15 +20,24 @@ import {
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
 import { useAuth } from '@/contexts';
+import { EventEntity } from '@/domain/models';
+import { deleteEvent, getAllEvents } from '@/domain/usecases/events';
 import { formatDate } from '@/helpers';
 import { PageLayout } from '@/layout';
-import { events } from '@/mock';
-import { ConfirmDeleteModal } from '@/components/Modal';
 
 export default function ManageEvents() {
   const { isAuthenticated, credentials } = useAuth();
   const { push } = useRouter();
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+
+  const [events, setEvents] = useState<EventEntity[] | null>(null);
+
+  const getEventsData = async () => {
+    const response = await getAllEvents();
+
+    if (response) {
+      setEvents(response);
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated && !credentials?.isAdmin) {
@@ -39,6 +47,10 @@ export default function ManageEvents() {
     }
   }, [isAuthenticated, credentials]);
 
+  useEffect(() => {
+    getEventsData();
+  }, []);
+
   const handleRegisterNew = () => {
     console.log('handleRegisterNew');
   };
@@ -47,9 +59,11 @@ export default function ManageEvents() {
     console.log('handleEditEvent');
   };
 
-  const handleDelete = () => {
-    console.log('handleDelete');
-    onToggle;
+  const handleDeleteEvent = async (eventId: string) => {
+    const response = deleteEvent(eventId);
+    console.log(response);
+
+    getEventsData();
   };
 
   return (
@@ -127,21 +141,13 @@ export default function ManageEvents() {
                             size="md"
                             aria-label="Delete Event"
                             icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={onOpen}
+                            onClick={() => handleDeleteEvent(event.id)}
                           />
                         </Tooltip>
                       </Td>
                     </Tr>
                   );
                 })}
-              <ConfirmDeleteModal
-                dialogText="Are you sure you want to delete this event?"
-                confirmLabel="YES"
-                cancelLabel="NO"
-                onConfirm={handleDelete}
-                closeDialog={onClose}
-                dialogState={isOpen}
-              />
             </Tbody>
           </Table>
         </TableContainer>

@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { CategoryEntity } from '@/entities';
+import { CategoryEntity } from '@/domain/models';
 
 interface CategoryTagProps extends Omit<CategoryEntity, 'id'> {
   isCard?: boolean;
