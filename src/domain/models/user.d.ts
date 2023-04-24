@@ -3,6 +3,7 @@ export interface UserEntity {
   name: string;
   surname: string;
   email: string;
+  password?: string;
   events: string[];
   isAdmin: boolean;
 }

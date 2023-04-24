@@ -79,7 +79,7 @@ export default function EventPage({
 export const getStaticPaths: GetStaticPaths = async () => {
   const events = await getAllEvents();
 
-  const paths = events?.map((event: EventEntity) => {
+  const paths = await events?.map((event: EventEntity) => {
     return {
       params: { id: event.id }
     };

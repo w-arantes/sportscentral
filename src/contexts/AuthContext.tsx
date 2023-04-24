@@ -10,7 +10,7 @@ import { setCookie, parseCookies, destroyCookie } from 'nookies';
 
 import { PLATFORM_SETTINGS } from '@/infra/config';
 import { UserEntity } from '@/domain/models';
-import { mockUserCredentials } from '@/mock/userCredentials';
+import { getUser } from '@/domain/usecases/users';
 
 type UserCredentials = Omit<UserEntity, 'events'>;
 
@@ -24,7 +24,7 @@ interface UpdateProfileCredentials extends UserCredentials {
 }
 
 interface AuthContextData {
-  signIn: (credentials: SignInCredentials) => void;
+  signIn: (credentials: SignInCredentials) => Promise<boolean>;
   signOut: () => void;
   updateProfileData: (credentials: UpdateProfileCredentials) => void;
   isAuthenticated: boolean;
@@ -81,16 +81,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const signIn = async ({ email, password }: SignInCredentials) => {
-    console.log('signIn', { email, password });
+    const validCredentials = await getUser(email, password);
 
-    //TODO: api request for sign-in
-    const signInCredentials = mockUserCredentials;
-
-    if (signInCredentials) {
-      setSession(signInCredentials);
+    if (validCredentials) {
+      setSession(validCredentials);
       setIsAuthenticated(true);
+
+      return true;
     } else {
       setIsAuthenticated(false);
+      return false;
     }
   };
 

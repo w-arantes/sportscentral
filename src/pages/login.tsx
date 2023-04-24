@@ -49,11 +49,16 @@ export default function Login() {
     resolver: zodResolver(loginFormSchema)
   });
 
-  const onSubmit = (credentials: LoginFormData) => {
-    console.log('LOGIN', credentials);
-    signIn(credentials);
+  const onSubmit = async (credentials: LoginFormData) => {
+    const hasValidCredentials = await signIn(credentials);
 
-    push('/dashboard');
+    if (hasValidCredentials) {
+      push('/dashboard');
+    } else {
+      console.log('invalid credentials');
+
+      //TODO: add toast, error message
+    }
   };
 
   return (
