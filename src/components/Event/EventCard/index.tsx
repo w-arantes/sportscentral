@@ -18,7 +18,7 @@ export function EventCard({
   return (
     <Link
       as={NextLink}
-      href={`/dashboard/event/${id}`}
+      href={`/event/${id}`}
       _hover={{
         textDecoration: 'none'
       }}

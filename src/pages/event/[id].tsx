@@ -1,6 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { Button, Flex, HStack, Img } from '@chakra-ui/react';
 
+import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
 import { EventEntity } from '@/domain/models';
 import { getEvent, getAllEvents } from '@/domain/usecases/events';
@@ -77,9 +78,9 @@ export default function EventPage({
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const events = await getAllEvents();
+  const events: EventEntity[] = await getAllEvents();
 
-  const paths = await events?.map((event: EventEntity) => {
+  const paths = events?.map((event: EventEntity) => {
     return {
       params: { id: event.id }
     };
@@ -93,11 +94,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params?.id as string;
-  const event = await getEvent(id);
+  const event: EventEntity = await getEvent(id);
 
   return {
     props: {
       ...event
-    }
+    },
+    revalidate: PLATFORM_SETTINGS.ssr.pages.EVENT_REVALIDATION
   };
 };
