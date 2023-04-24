@@ -28,7 +28,7 @@ interface AuthContextData {
   signOut: () => void;
   updateProfileData: (credentials: UpdateProfileCredentials) => void;
   isAuthenticated: boolean;
-  credentials: UserEntity | null;
+  credentials: UserCredentials | null;
 }
 
 interface AuthProviderProps {
