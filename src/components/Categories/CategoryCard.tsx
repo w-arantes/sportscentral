@@ -8,7 +8,7 @@ export function CategoryCard({ id, name }: CategoryEntity) {
   return (
     <Link
       as={NextLink}
-      href={`/events-by-category/${id}`}
+      href={`/events/category/${id}`}
       _hover={{
         textDecoration: 'none'
       }}
