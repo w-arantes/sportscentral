@@ -22,7 +22,7 @@ export default function Dashboard() {
   }, [isAuthenticated]);
 
   return (
-    <PageLayout title="Dashboard | SportsCentral" mt="1rem">
+    <PageLayout title="Dashboard | SportsCentral">
       <Section title="Following" isLoading={isFetchingData}>
         {events &&
           events.map((event: EventEntity) => {
@@ -32,7 +32,8 @@ export default function Dashboard() {
                 id={event.id}
                 title={event.title}
                 category={event.category}
-                date={event.date}
+                startDate={event.startDate}
+                endDate={event.endDate}
                 location={event.location}
                 followers={event.followers}
               />
@@ -48,14 +49,19 @@ export default function Dashboard() {
                 id={event.id}
                 title={event.title}
                 category={event.category}
-                date={event.date}
+                startDate={event.startDate}
+                endDate={event.endDate}
                 location={event.location}
                 followers={event.followers}
               />
             );
           })}
       </Section>
-      <Section title="Categories" isLoadingCategories={isFetchingData}>
+      <Section
+        title="Categories"
+        isLoadingCategories={isFetchingData}
+        height="250px"
+      >
         {categories &&
           categories.map((category: CategoryEntity) => {
             return (

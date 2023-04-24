@@ -12,7 +12,10 @@ import {
   FormLabel,
   VStack,
   Input,
-  Text
+  Text,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink
 } from '@chakra-ui/react';
 
 import { PageLayout } from '@/layout';
@@ -76,6 +79,17 @@ export default function ProfileSettings() {
 
   return (
     <PageLayout title="Profile Settings | SportsCentral">
+      <Flex align="center" justify="flex-start" w="100%" h="56px">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink href={'/dashboard/profile'}>Profile</BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
+      </Flex>
+
       <Flex direction="column" align="center" justify="center">
         <Text fontSize="title" fontWeight="bold" color="white">
           Profile Settings

@@ -1,22 +1,7 @@
 export const categories = [
-  {
-    id: '1',
-    name: 'Football'
-  },
-  {
-    id: '2',
-    name: 'Baseball'
-  },
-  {
-    id: '3',
-    name: 'Baseball'
-  },
-  {
-    id: '4',
-    name: 'Motorsports'
-  },
-  {
-    id: '5',
-    name: 'Tennis'
-  }
+  { id: 'football', name: 'Football' },
+  { id: 'basketball', name: 'Basketball' },
+  { id: 'handball', name: 'Handball' },
+  { id: 'ice-hockey', name: 'Ice Hockey' },
+  { id: 'volleyball', name: 'Volleyball' }
 ];

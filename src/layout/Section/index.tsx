@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { Flex, FlexProps, Skeleton, Stack, Text } from '@chakra-ui/react';
+import NextLink from 'next/link';
+import { Flex, FlexProps, Skeleton, Stack, Text, Link } from '@chakra-ui/react';
 
 interface SectionProps extends FlexProps {
   children: ReactNode;
@@ -20,17 +21,18 @@ export function Section({
       as="section"
       direction="column"
       width="100%"
-      height="340px"
-      mb="5rem"
+      height="400px"
+      mt="2rem"
+      mb="2rem"
       {...rest}
     >
-      <Flex direction="row" justify="flex-start" px="36px">
+      <Flex direction="row" justify="flex-start">
         <Text fontSize="title" fontWeight="bold">
           {title}
         </Text>
       </Flex>
 
-      <Flex direction="row" align="center" justify="center" mt="1rem">
+      <Flex direction="row" align="center" justify="center" mt="1rem" mb="1rem">
         <Stack direction="row" spacing="2rem">
           {isLoading || isLoadingCategories ? (
             <>
@@ -58,10 +60,20 @@ export function Section({
         </Stack>
       </Flex>
 
-      <Flex direction="row" justify="flex-start" px="36px">
-        <Text fontSize="h2" fontWeight="bold" mt="1rem">
-          {`All ${title.toUpperCase()}`}
-        </Text>
+      <Flex direction="row" justify="flex-start">
+        <Link
+          as={NextLink}
+          href={`/dashboard/view-all/${title.toLowerCase()}`}
+          _hover={{
+            textDecoration: 'none',
+            color: 'brand.primary',
+            transition: 'color 0.5s ease'
+          }}
+        >
+          <Text fontSize="h2" fontWeight="bold">
+            VIEW ALL
+          </Text>
+        </Link>
       </Flex>
     </Flex>
   );

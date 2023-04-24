@@ -20,7 +20,7 @@ export function PageLayout({ children, title, ...rest }: PageLayoutProps) {
       width="100%"
       height="100%"
       px="146px"
-      mt="4rem"
+      mt="1rem"
       {...rest}
     >
       <SEO pageTitle={title} url={asPath} />

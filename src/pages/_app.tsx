@@ -1,13 +1,13 @@
 import type { AppProps } from 'next/app';
 import { Providers } from './_providers';
-
-import { Header } from '@/layout';
+import { Layout } from './_layout';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Providers>
-      <Header />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </Providers>
   );
 }

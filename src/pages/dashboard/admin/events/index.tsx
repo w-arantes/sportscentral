@@ -20,12 +20,13 @@ import {
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
-import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
-import { users } from '@/mock';
+import { formatDate } from '@/helpers';
+import { PageLayout } from '@/layout';
+import { events } from '@/mock';
 import { ConfirmDeleteModal } from '@/components/Modal';
 
-export default function ManageUsers() {
+export default function ManageEvents() {
   const { isAuthenticated, credentials } = useAuth();
   const { push } = useRouter();
   const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
@@ -42,8 +43,8 @@ export default function ManageUsers() {
     console.log('handleRegisterNew');
   };
 
-  const handleEditUser = () => {
-    console.log('handleEditUser');
+  const handleEditEvent = () => {
+    console.log('handleEditEvent');
   };
 
   const handleDelete = () => {
@@ -52,7 +53,7 @@ export default function ManageUsers() {
   };
 
   return (
-    <PageLayout title="Manage Users | SportsCentral">
+    <PageLayout title="Manage Events | SportsCentral">
       <Flex align="center" justify="flex-start" w="100%" h="56px">
         <Breadcrumb>
           <BreadcrumbItem>
@@ -62,8 +63,8 @@ export default function ManageUsers() {
             <BreadcrumbLink>Admin</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink isCurrentPage href={'/dashboard/admin/users'}>
-              Users
+            <BreadcrumbLink isCurrentPage href={'/dashboard/admin/events'}>
+              Events
             </BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
@@ -71,7 +72,7 @@ export default function ManageUsers() {
 
       <Flex direction="column" align="center" justify="center">
         <Text fontSize="title" fontWeight="bold" color="white">
-          Manage Users
+          Manage Events
         </Text>
       </Flex>
 
@@ -84,8 +85,8 @@ export default function ManageUsers() {
         p="4rem"
       >
         <Flex direction="row" align="center" justify="space-between">
-          <Text color="white">All Users: {users?.length}</Text>
-          <Button onClick={handleRegisterNew}>NEW USER</Button>
+          <Text color="white">All Events: {events?.length}</Text>
+          <Button onClick={handleRegisterNew}>NEW EVENT</Button>
         </Flex>
 
         <TableContainer mt="2rem">
@@ -93,38 +94,38 @@ export default function ManageUsers() {
             <Thead>
               <Tr>
                 <Th color="gray.light">Id</Th>
-                <Th color="gray.light">Name</Th>
-                <Th color="gray.light">Surname</Th>
-                <Th color="gray.light">Admin Features</Th>
-                <Th color="gray.light">E-mail</Th>
+                <Th color="gray.light">Title</Th>
+                <Th color="gray.light">Category</Th>
+                <Th color="gray.light">Start Date</Th>
+                <Th color="gray.light">End Date</Th>
                 <Th color="gray.light">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {users &&
-                users.map((user) => {
+              {events &&
+                events.map((event) => {
                   return (
-                    <Tr key={user.id}>
-                      <Td>{user?.id}</Td>
-                      <Td>{user?.name}</Td>
-                      <Td>{user?.surname}</Td>
-                      <Td>{user?.isAdmin ? 'Yes' : 'No'}</Td>
-                      <Td>{user?.email}</Td>
+                    <Tr key={event.id}>
+                      <Td>{event?.id}</Td>
+                      <Td>{event?.title}</Td>
+                      <Td>{event?.category}</Td>
+                      <Td>{formatDate(event?.startDate)}</Td>
+                      <Td>{formatDate(event?.endDate)}</Td>
                       <Td>
-                        <Tooltip label="Edit User" openDelay={500}>
+                        <Tooltip label="Edit Event" openDelay={500}>
                           <IconButton
                             variant="unstyled"
                             size="md"
-                            aria-label="Edit User"
+                            aria-label="Edit Event"
                             icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={handleEditUser}
+                            onClick={handleEditEvent}
                           />
                         </Tooltip>
-                        <Tooltip label="Delete User" openDelay={500}>
+                        <Tooltip label="Delete Event" openDelay={500}>
                           <IconButton
                             variant="unstyled"
                             size="md"
-                            aria-label="Delete User"
+                            aria-label="Delete Event"
                             icon={<TrashSimple size={20} color="#F75A68" />}
                             onClick={onOpen}
                           />
@@ -134,7 +135,7 @@ export default function ManageUsers() {
                   );
                 })}
               <ConfirmDeleteModal
-                dialogText="Are you sure you want to delete the user?"
+                dialogText="Are you sure you want to delete this event?"
                 confirmLabel="YES"
                 cancelLabel="NO"
                 onConfirm={handleDelete}

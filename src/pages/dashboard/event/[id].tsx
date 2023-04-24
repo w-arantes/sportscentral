@@ -7,13 +7,15 @@ import { EventBreadcrumb, EventFollowers, EventInfo } from '@/components/Event';
 import { useAuth } from '@/contexts';
 
 import { events } from '@/mock';
+import { formatDateRange } from '@/helpers';
 
 export default function EventPage({
   id,
   title,
   description,
   category,
-  date,
+  startDate,
+  endDate,
   followers,
   location
 }: EventEntity) {
@@ -32,7 +34,7 @@ export default function EventPage({
   };
 
   return (
-    <PageLayout title={`${title} - Event Page | SportsCentral`} mt="1rem">
+    <PageLayout title={`${title} - Event Page | SportsCentral`}>
       <EventBreadcrumb id={id} title={title} category={category} />
 
       <Flex direction="column" w="100%" h="320px">
@@ -41,16 +43,16 @@ export default function EventPage({
           alt="Event category image"
           w="608px"
           h="320px"
+          objectFit="cover"
         />
       </Flex>
       <EventInfo
         title={title}
-        date={date}
+        date={formatDateRange(startDate, endDate)}
         category={category}
         location={location}
         description={description}
       />
-
       <HStack
         spacing="2rem"
         align="flex-start"

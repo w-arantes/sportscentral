@@ -4,7 +4,10 @@ import { CalendarBlank, MapPin } from '@phosphor-icons/react';
 
 import { EventEntity } from '@/entities';
 
-type EventInfoProps = Omit<EventEntity, 'id' | 'followers'>;
+interface EventInfoProps
+  extends Omit<EventEntity, 'startDate' | 'endDate' | 'id' | 'followers'> {
+  date: string;
+}
 
 export function EventInfo({
   title,
@@ -20,7 +23,7 @@ export function EventInfo({
       h="100%"
       align="flex-start"
       justify="flex-start"
-      mb="1rem"
+      mb="2rem"
     >
       <VStack spacing="1rem" align="flex-start">
         <Text fontSize="title" fontWeight="bold" color="white">

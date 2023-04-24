@@ -5,7 +5,8 @@ export interface EventEntity {
   title: string;
   description?: string;
   category: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   location: string;
   followers: UserType[];
 }

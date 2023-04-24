@@ -3,13 +3,15 @@ import { Flex, Box, Text, Img, Link, Stack, Tooltip } from '@chakra-ui/react';
 import { CalendarBlank, MapPin, Heart } from '@phosphor-icons/react';
 
 import { EventEntity } from '@/entities';
+import { formatDateRange } from '@/helpers';
 import { CategoryTag } from '@/components/Categories';
 
 export function EventCard({
   id,
   title,
   category,
-  date,
+  startDate,
+  endDate,
   location,
   followers
 }: EventEntity) {
@@ -25,7 +27,7 @@ export function EventCard({
         <Flex
           direction="column"
           minWidth="296px"
-          height="320px"
+          height="340px"
           bg="gray.medium"
           _hover={{
             border: '1px solid',
@@ -40,6 +42,7 @@ export function EventCard({
               alt={`Event category default image - ${category}`}
               w="100%"
               h="160px"
+              objectFit="cover"
             />
           </Box>
           <Stack
@@ -55,7 +58,7 @@ export function EventCard({
             <Flex direction="row" align="center" justify="flex-start">
               <CalendarBlank size={20} color="#00875F" />
               <Text fontSize="h3" ml="0.5rem">
-                {date}
+                {formatDateRange(startDate, endDate)}
               </Text>
             </Flex>
             <Flex direction="row" align="center" justify="flex-start">
