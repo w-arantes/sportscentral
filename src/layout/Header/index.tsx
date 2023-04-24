@@ -6,7 +6,11 @@ import {
   Tooltip,
   Avatar,
   Button,
-  IconButton
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
 } from '@chakra-ui/react';
 import { SignOut } from '@phosphor-icons/react';
 
@@ -49,24 +53,50 @@ export function Header() {
                 </Button>
               </Tooltip>
               {credentials?.isAdmin && (
-                <>
-                  <Tooltip label="Manage users" openDelay={500}>
-                    <Button
-                      variant="header"
-                      onClick={() => push('/dashboard/admin/users')}
-                    >
-                      USERS
-                    </Button>
-                  </Tooltip>
-                  <Tooltip label="Manage events" openDelay={500}>
-                    <Button
-                      variant="header"
-                      onClick={() => push('/dashboard/admin/events')}
-                    >
-                      EVENTS
-                    </Button>
-                  </Tooltip>
-                </>
+                <Menu>
+                  <MenuButton>MANAGE</MenuButton>
+                  <MenuList bg="gray.medium">
+                    <Tooltip label="Manage Users" openDelay={1000}>
+                      <MenuItem
+                        as="a"
+                        href="/dashboard/admin/users"
+                        bg="gray.medium"
+                        _hover={{
+                          bg: 'brand.primary',
+                          color: 'white'
+                        }}
+                      >
+                        USERS
+                      </MenuItem>
+                    </Tooltip>
+                    <Tooltip label="Manage Events" openDelay={1000}>
+                      <MenuItem
+                        as="a"
+                        href="/dashboard/admin/events"
+                        bg="gray.medium"
+                        _hover={{
+                          bg: 'brand.primary',
+                          color: 'white'
+                        }}
+                      >
+                        EVENTS
+                      </MenuItem>
+                    </Tooltip>
+                    <Tooltip label="Manage Categories" openDelay={1000}>
+                      <MenuItem
+                        as="a"
+                        href="/dashboard/admin/categories"
+                        bg="gray.medium"
+                        _hover={{
+                          bg: 'brand.primary',
+                          color: 'white'
+                        }}
+                      >
+                        CATEGORIES
+                      </MenuItem>
+                    </Tooltip>
+                  </MenuList>
+                </Menu>
               )}
               <Tooltip label="Sign-out" openDelay={500}>
                 <IconButton

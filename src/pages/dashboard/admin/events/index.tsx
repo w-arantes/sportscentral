@@ -23,10 +23,11 @@ import { useAuth } from '@/contexts';
 import { EventEntity } from '@/domain/models';
 import { deleteEvent, getAllEvents } from '@/domain/usecases/events';
 import { formatDate } from '@/helpers';
+
 import { PageLayout } from '@/layout';
 
 export default function ManageEvents() {
-  const { isAuthenticated, credentials } = useAuth();
+  const { credentials } = useAuth();
   const { push } = useRouter();
 
   const [events, setEvents] = useState<EventEntity[] | null>(null);
@@ -40,12 +41,10 @@ export default function ManageEvents() {
   };
 
   useEffect(() => {
-    if (isAuthenticated && !credentials?.isAdmin) {
+    if (!credentials?.isAdmin) {
       push('/dashboard');
-    } else if (!isAuthenticated) {
-      push('/login');
     }
-  }, [isAuthenticated, credentials]);
+  }, [credentials]);
 
   useEffect(() => {
     getEventsData();
@@ -117,7 +116,7 @@ export default function ManageEvents() {
             </Thead>
             <Tbody>
               {events &&
-                events.map((event) => {
+                events.map((event: EventEntity) => {
                   return (
                     <Tr key={event.id}>
                       <Td>{event?.id}</Td>
@@ -141,7 +140,7 @@ export default function ManageEvents() {
                             size="md"
                             aria-label="Delete Event"
                             icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={() => handleDeleteEvent(event.id)}
+                            onClick={() => handleDeleteEvent(event?.id)}
                           />
                         </Tooltip>
                       </Td>

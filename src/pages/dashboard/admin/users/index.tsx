@@ -27,7 +27,7 @@ import { PageLayout } from '@/layout';
 // import { ConfirmDeleteModal } from '@/components/Modal';
 
 export default function ManageUsers() {
-  const { isAuthenticated, credentials } = useAuth();
+  const { credentials } = useAuth();
   const { push } = useRouter();
   // const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
 
@@ -42,12 +42,10 @@ export default function ManageUsers() {
   };
 
   useEffect(() => {
-    if (isAuthenticated && !credentials?.isAdmin) {
+    if (!credentials?.isAdmin) {
       push('/dashboard');
-    } else if (!isAuthenticated) {
-      push('/login');
     }
-  }, [isAuthenticated, credentials]);
+  }, [credentials]);
 
   useEffect(() => {
     getUsersData();
@@ -121,7 +119,7 @@ export default function ManageUsers() {
             </Thead>
             <Tbody>
               {users &&
-                users.map((user) => {
+                users.map((user: UserEntity) => {
                   return (
                     <Tr key={user.id}>
                       <Td>{user?.id}</Td>
@@ -145,7 +143,7 @@ export default function ManageUsers() {
                             size="md"
                             aria-label="Delete User"
                             icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={() => handleDeleteUser(user.id)}
+                            onClick={() => handleDeleteUser(user?.id)}
                           />
                         </Tooltip>
                       </Td>
