@@ -1,3 +1,9 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 import {
   Button,
   Text,
@@ -9,16 +15,14 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-import { PageLayout } from '@/layout/PageLayout';
+import { PageLayout } from '@/layout';
+import { useAuth } from '@/contexts';
 
 const registerFormSchema = z
   .object({
     email: z.string().nonempty('Email is required').email('Invalid Email'),
     name: z.string().nonempty('Name is required.'),
+    surname: z.string().nonempty('Surname is required.'),
     password: z
       .string()
       .nonempty('Password is required.')
@@ -37,6 +41,9 @@ const registerFormSchema = z
 type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 export default function SignUp() {
+  const { isAuthenticated } = useAuth();
+  const { push } = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -45,12 +52,20 @@ export default function SignUp() {
     resolver: zodResolver(registerFormSchema)
   });
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      push('/dashboard');
+    }
+  }, [isAuthenticated]);
+
   const onSubmit = (credentials: RegisterFormData) => {
     console.log('SIGN-UP', credentials);
+
+    push('/dashboard');
   };
 
   return (
-    <PageLayout>
+    <PageLayout title="Sign-Up to SportsCentral">
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
@@ -65,7 +80,7 @@ export default function SignUp() {
           <Input
             type="email"
             placeholder="<your email>"
-            borderRadius={0}
+            rounded="none"
             {...register('email')}
           />
           <FormErrorMessage>
@@ -77,11 +92,23 @@ export default function SignUp() {
           <Input
             type="text"
             placeholder="<your name>"
-            borderRadius={0}
+            rounded="none"
             {...register('name')}
           />
           <FormErrorMessage>
             {errors.name && errors.name.message}
+          </FormErrorMessage>
+        </FormControl>
+        <FormControl isInvalid={Boolean(errors.surname)}>
+          <FormLabel>Surname</FormLabel>
+          <Input
+            type="text"
+            placeholder="<surname>"
+            rounded="none"
+            {...register('surname')}
+          />
+          <FormErrorMessage>
+            {errors.surname && errors.surname.message}
           </FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={Boolean(errors.password)}>
@@ -89,7 +116,7 @@ export default function SignUp() {
           <Input
             type="password"
             placeholder="password"
-            borderRadius={0}
+            rounded="none"
             {...register('password')}
           />
           <FormErrorMessage>
@@ -101,7 +128,7 @@ export default function SignUp() {
           <Input
             type="password"
             placeholder="confirm"
-            borderRadius={0}
+            rounded="none"
             {...register('confirmPassword')}
           />
           <FormErrorMessage>

@@ -9,7 +9,7 @@ export function Footer() {
       direction="column"
       align="center"
       justify="center"
-      position="fixed"
+      position="relative"
       width="100%"
       height="100px"
       bottom="0"
@@ -17,7 +17,12 @@ export function Footer() {
       right="0"
       pt="1rem"
     >
-      <Img src="/branding/icon.svg" />
+      <Img
+        src="/branding/icon.svg"
+        alt="SportsCentral icon composed by a rectangle with brand primary color (green) and SportsCentral initials (S and C)."
+        w="40px"
+        h="40px"
+      />
       <Text mt="1rem">{`@ ${CURRENT_YEAR} SportsCentral`}</Text>
     </Flex>
   );

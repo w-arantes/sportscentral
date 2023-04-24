@@ -19,7 +19,8 @@ export const Button: ComponentStyleConfig = {
     solid: {
       bg: 'brand.primary',
       _hover: {
-        backgroundColor: 'brand.light'
+        backgroundColor: 'brand.light',
+        transition: 'background-color 0.5s ease'
       }
     },
 
@@ -29,7 +30,8 @@ export const Button: ComponentStyleConfig = {
       _hover: {
         backgroundColor: 'transparent',
         color: 'brand.light',
-        borderColor: 'brand.light'
+        borderColor: 'brand.light',
+        transition: 'color border-color 0.5s ease'
       }
     },
 
@@ -40,7 +42,18 @@ export const Button: ComponentStyleConfig = {
       _hover: {
         backgroundColor: 'transparent',
         color: 'red.400',
-        borderColor: 'red.400'
+        borderColor: 'red.400',
+        transition: 'color border-color 0.5s ease'
+      }
+    },
+
+    header: {
+      width: '100px',
+      color: 'gray.light',
+      fontWeight: 'normal',
+      _hover: {
+        color: 'brand.primary',
+        transition: 'color 0.5s ease'
       }
     }
   },

@@ -1,4 +1,10 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
 import {
   Button,
   Text,
@@ -12,14 +18,11 @@ import {
   FormLabel
 } from '@chakra-ui/react';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-import { PageLayout } from '@/layout/PageLayout';
+import { PageLayout } from '@/layout';
+import { useAuth } from '@/contexts';
 
 const loginFormSchema = z.object({
-  email: z.string().nonempty('E-mail is required.'),
+  email: z.string().nonempty('E-mail is required.').email('Invalid E-mail.'),
   password: z
     .string()
     .nonempty('Password is required.')
@@ -29,6 +32,15 @@ const loginFormSchema = z.object({
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function Login() {
+  const { signIn, isAuthenticated } = useAuth();
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      push('/dashboard');
+    }
+  }, [isAuthenticated]);
+
   const {
     register,
     handleSubmit,
@@ -39,10 +51,13 @@ export default function Login() {
 
   const onSubmit = (credentials: LoginFormData) => {
     console.log('LOGIN', credentials);
+    signIn(credentials);
+
+    push('/dashboard');
   };
 
   return (
-    <PageLayout>
+    <PageLayout title="Login">
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
@@ -73,7 +88,7 @@ export default function Login() {
           <Input
             type="email"
             placeholder="Email"
-            borderRadius={0}
+            rounded="none"
             {...register('email')}
           />
           <FormErrorMessage>
@@ -85,7 +100,7 @@ export default function Login() {
           <Input
             type="password"
             placeholder="Password"
-            borderRadius={0}
+            rounded="none"
             {...register('password')}
           />
           <FormErrorMessage>
