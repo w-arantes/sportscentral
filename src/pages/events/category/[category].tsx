@@ -5,26 +5,42 @@ import { CategoryEntity, EventEntity } from '@/domain/models';
 import { getAllCategories } from '@/domain/usecases/categories';
 import { getEventsByCategory } from '@/domain/usecases/events';
 
-import { PageLayout } from '@/layout';
+import { PageLayout, Section } from '@/layout';
+import { CategoryHeader } from '@/components/Categories';
+import { EventCard } from '@/components/Event';
 
 interface EventsByCategoryProps {
   events: EventEntity[];
   category: string;
 }
 
-export default function EventsByCategory({ events }: EventsByCategoryProps) {
+export default function EventsByCategory({
+  events,
+  category
+}: EventsByCategoryProps) {
   return (
-    <PageLayout title={`All Events by Category | SportsCentral`}>
-      <h1>All Events By Category</h1>
+    <PageLayout
+      title={`All Events by Category ${category.toUpperCase()} | SportsCentral`}
+    >
+      <CategoryHeader categoryName={category} />
 
-      {events &&
-        events.map((event: EventEntity) => {
-          return (
-            <div key={event.id}>
-              <p>{event.title}</p>
-            </div>
-          );
-        })}
+      <Section title="All Events">
+        {events &&
+          events.map((event: EventEntity) => {
+            return (
+              <EventCard
+                key={event.id}
+                id={event.id}
+                title={event.title}
+                category={event.category}
+                startDate={event.startDate}
+                endDate={event.endDate}
+                location={event.location}
+                followers={event.followers}
+              />
+            );
+          })}
+      </Section>
     </PageLayout>
   );
 }
@@ -50,7 +66,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      events
+      events,
+      category
     },
     revalidate: PLATFORM_SETTINGS.ssr.pages.EVENTS_BY_CATEGORY_REVALIDATION
   };

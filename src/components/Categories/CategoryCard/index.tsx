@@ -2,7 +2,7 @@ import NextLink from 'next/link';
 import { Link, Tooltip } from '@chakra-ui/react';
 import { CategoryEntity } from '@/domain/models';
 
-import { CategoryTag } from './CategoryTag';
+import { CategoryTag } from '../CategoryTag';
 
 export function CategoryCard({ id, name }: CategoryEntity) {
   return (
