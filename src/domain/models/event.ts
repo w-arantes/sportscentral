@@ -1,4 +1,4 @@
-import { UserType } from './user';
+import { UserEntity } from './user';
 
 export interface EventEntity {
   id: string;
@@ -8,5 +8,5 @@ export interface EventEntity {
   startDate: string;
   endDate: string;
   location: string;
-  followers: UserType[];
+  followers: UserEntity[];
 }
