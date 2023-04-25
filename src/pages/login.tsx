@@ -15,7 +15,8 @@ import {
   Link,
   FormControl,
   FormErrorMessage,
-  FormLabel
+  FormLabel,
+  useToast
 } from '@chakra-ui/react';
 
 import { PageLayout } from '@/layout';
@@ -34,6 +35,7 @@ type LoginFormData = z.infer<typeof loginFormSchema>;
 export default function Login() {
   const { signIn, isAuthenticated } = useAuth();
   const { push } = useRouter();
+  const toast = useToast();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -55,9 +57,14 @@ export default function Login() {
     if (hasValidCredentials) {
       push('/dashboard');
     } else {
-      console.log('invalid credentials');
-
-      //TODO: add toast, error message
+      toast({
+        title: 'Error',
+        description:
+          'Failed to sign-in. Please verify your credentials and try again.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
     }
   };
 

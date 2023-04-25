@@ -13,7 +13,7 @@ import {
   Thead,
   Tr,
   Tooltip,
-  useDisclosure,
+  useToast,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink
@@ -24,12 +24,11 @@ import { useAuth } from '@/contexts';
 import { UserEntity } from '@/domain/models';
 import { getAllUsers, deleteUser } from '@/domain/usecases/users';
 import { PageLayout } from '@/layout';
-// import { ConfirmDeleteModal } from '@/components/Modal';
 
 export default function ManageUsers() {
   const { credentials } = useAuth();
   const { push } = useRouter();
-  // const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const toast = useToast();
 
   const [users, setUsers] = useState<UserEntity[] | null>(null);
 
@@ -60,12 +59,27 @@ export default function ManageUsers() {
   };
 
   const handleDeleteUser = async (userId: string) => {
-    const response = await deleteUser(userId);
-    console.log(response);
+    const { status } = await deleteUser(userId);
 
-    getUsersData();
+    if (status === 201) {
+      getUsersData();
 
-    //TODO: add visual feedback and update users action
+      toast({
+        title: 'Success',
+        description: 'User deleted with success.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Unable to delete the user, try again or contact support.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    }
   };
 
   return (
@@ -150,14 +164,6 @@ export default function ManageUsers() {
                     </Tr>
                   );
                 })}
-              {/* <ConfirmDeleteModal
-                dialogText="Are you sure you want to delete the user?"
-                confirmLabel="YES"
-                cancelLabel="NO"
-                onConfirm={handleDelete}
-                closeDialog={onClose}
-                dialogState={isOpen}
-              /> */}
             </Tbody>
           </Table>
         </TableContainer>

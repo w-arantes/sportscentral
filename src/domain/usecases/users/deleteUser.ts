@@ -1,6 +1,8 @@
-import { httpClient } from '@/infra/http';
+import { httpClient, HttpClientDefaultResponse } from '@/infra/http';
 
-export const deleteUser = async (userId: string) => {
+export const deleteUser = async (
+  userId: string
+): Promise<HttpClientDefaultResponse> => {
   try {
     const response = await httpClient.delete(`/users/${userId}`);
 

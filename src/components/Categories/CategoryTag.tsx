@@ -9,7 +9,7 @@ export function CategoryTag({ name, isCard = false }: CategoryTagProps) {
   return (
     <Flex
       minWidth={isCard ? '296px' : '100px'}
-      h={isCard ? '40px' : '20px'}
+      height={isCard ? '40px' : '20px'}
       align="center"
       justify="center"
       bg="tag"

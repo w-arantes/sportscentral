@@ -1,6 +1,7 @@
 import { httpClient } from '@/infra/http';
+import { UserEntity } from '@/domain/models';
 
-export const getUser = async (email: string, password: string) => {
+export const getUser = async ({ email, password }: Partial<UserEntity>) => {
   try {
     const { data } = await httpClient.get('/users', {
       params: {
