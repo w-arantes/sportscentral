@@ -1,10 +1,13 @@
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import { Button, Flex, HStack, Img } from '@chakra-ui/react';
+import { Button, Flex, HStack, Img, useToast } from '@chakra-ui/react';
 
 import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
-import { EventEntity } from '@/domain/models';
+import { EventEntity, UserEntity } from '@/domain/models';
 import { getEvent, getAllEvents } from '@/domain/usecases/events';
+import { removeUserEvent, updateUserEvents } from '@/domain/usecases/users';
 import { formatDateRange } from '@/helpers';
 
 import { PageLayout } from '@/layout';
@@ -20,17 +23,79 @@ export default function EventPage({
   followers,
   location
 }: EventEntity) {
-  const { isAuthenticated, credentials } = useAuth();
+  const { isAuthenticated, credentials, updateProfileData } = useAuth();
+  const { push } = useRouter();
+  const toast = useToast();
+
+  const [isFollowingEvent, setIsFollowingEvent] = useState<boolean>(false);
+
+  const currentEvent = {
+    id,
+    title,
+    description,
+    category,
+    startDate,
+    endDate,
+    followers,
+    location
+  };
+
+  const verifyUserEvents = (
+    userEvents: EventEntity[],
+    currentEventId: string
+  ) => {
+    const isFollowingCurrentEvent = userEvents.find(
+      (event) => event.id === currentEventId
+    );
+
+    if (isFollowingCurrentEvent) {
+      setIsFollowingEvent(true);
+    } else {
+      setIsFollowingEvent(false);
+    }
+  };
+
+  useEffect(() => {
+    if (credentials) {
+      verifyUserEvents(credentials?.events, id);
+    }
+  }, [credentials]);
 
   const handleEditEvent = () => {
     console.log('EDIT EVENT');
   };
 
-  const handleFollowEvent = () => {
-    if (!isAuthenticated) {
-      //TODO: suggest login modal
+  const handleUnfollow = async (eventId: string) => {
+    const { data } = await removeUserEvent(credentials as UserEntity, eventId);
+
+    if (data) {
+      updateProfileData(data);
     } else {
-      console.log('FOLLOW EVENT');
+      toast({
+        title: 'Error',
+        description:
+          'Unable to unfollow the event, try again or contact support.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    }
+  };
+
+  const handleFollowEvent = async (event: EventEntity) => {
+    const { data } = await updateUserEvents(credentials as UserEntity, event);
+
+    if (data) {
+      updateProfileData(data);
+    } else {
+      toast({
+        title: 'Error',
+        description:
+          'Unable to follow the event, try again or contact support.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
     }
   };
 
@@ -61,12 +126,37 @@ export default function EventPage({
         w="100%"
         h="100%"
       >
-        <Button variant="solid" onClick={handleFollowEvent}>
-          FOLLOW EVENT
-        </Button>
+        {!isAuthenticated ? (
+          <Button variant="solid" onClick={() => push('/login')}>
+            SIGN-IN TO FOLLOW EVENT
+          </Button>
+        ) : (
+          <>
+            {isFollowingEvent ? (
+              <Button
+                variant="outline"
+                onClick={() => handleUnfollow(currentEvent.id)}
+              >
+                UNFOLLOW EVENT
+              </Button>
+            ) : (
+              <Button
+                variant="solid"
+                onClick={() => handleFollowEvent(currentEvent)}
+              >
+                FOLLOW EVENT
+              </Button>
+            )}
+          </>
+        )}
 
         {credentials?.isAdmin && (
-          <Button variant="outline" onClick={handleEditEvent}>
+          <Button
+            variant="outline"
+            color="gray.light"
+            borderColor="gray.light"
+            onClick={handleEditEvent}
+          >
             EDIT EVENT
           </Button>
         )}
