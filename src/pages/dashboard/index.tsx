@@ -9,13 +9,15 @@ import { getAllCategories } from '@/domain/usecases/categories';
 import { PageLayout, Section } from '@/layout';
 import { CategoryCard } from '@/components/Categories';
 import { EventCard } from '@/components/Event';
+import { getUserEvents } from '@/domain/usecases/users';
 
 export default function Dashboard() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, credentials } = useAuth();
   const { push } = useRouter();
 
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
   const [events, setEvents] = useState<EventEntity[] | null>(null);
+  const [following, setFollowing] = useState<EventEntity[] | null>(null);
   const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
 
   useEffect(() => {
@@ -23,6 +25,16 @@ export default function Dashboard() {
       push('/login');
     }
   }, [isAuthenticated]);
+
+  const getFollowingData = async () => {
+    if (credentials) {
+      const response = await getUserEvents(credentials?.id);
+
+      if (response) {
+        setFollowing(response);
+      }
+    }
+  };
 
   const getCategoriesData = async () => {
     const response = await getAllCategories();
@@ -43,20 +55,26 @@ export default function Dashboard() {
   const getDashboardData = async () => {
     setIsFetchingData(true);
 
-    Promise.all([getEventsData(), getCategoriesData()]).finally(() => {
+    Promise.all([
+      getFollowingData(),
+      getEventsData(),
+      getCategoriesData()
+    ]).finally(() => {
       setIsFetchingData(false);
     });
   };
 
   useEffect(() => {
-    getDashboardData();
+    if (credentials) {
+      getDashboardData();
+    }
   }, []);
 
   return (
     <PageLayout title="Dashboard | SportsCentral">
       <Section title="Following" isLoading={isFetchingData}>
-        {events &&
-          events.map((event: EventEntity) => {
+        {following &&
+          following?.map((event: EventEntity) => {
             return (
               <EventCard
                 key={event.id}
@@ -73,7 +91,7 @@ export default function Dashboard() {
       </Section>
       <Section title="Events" isLoading={isFetchingData}>
         {events &&
-          events.map((event: EventEntity) => {
+          events?.map((event: EventEntity) => {
             return (
               <EventCard
                 key={event.id}
@@ -94,7 +112,7 @@ export default function Dashboard() {
         height="250px"
       >
         {categories &&
-          categories.map((category: CategoryEntity) => {
+          categories?.map((category: CategoryEntity) => {
             return (
               <CategoryCard
                 key={category.id}
