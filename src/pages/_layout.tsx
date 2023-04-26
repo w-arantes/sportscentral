@@ -4,7 +4,7 @@ import { Fade } from '@chakra-ui/react';
 
 import { Header } from '@/layout';
 
-export function Layout({ children }: { children: ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   const { route } = useRouter();
 
   return (

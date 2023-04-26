@@ -1,18 +1,22 @@
-import { ComponentStyleConfig } from '@chakra-ui/react';
+import { inputAnatomy } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
 
-export const Input: ComponentStyleConfig = {
-  baseStyle: {
-    field: {
-      width: '100%',
-      height: '32px',
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(inputAnatomy.keys);
+
+const baseStyle = definePartsStyle({
+  field: {
+    width: '100%',
+    height: '32px',
+    fontSize: 'h3',
+    fontWeight: 'normal',
+    color: 'white',
+    borderColor: 'red.900',
+    _placeholder: {
       fontSize: 'h3',
-      fontWeight: 'normal',
-      color: 'white',
-      borderColor: 'red.900',
-      _placeholder: {
-        fontSize: 'h3',
-        color: 'gray.light'
-      }
+      color: 'gray.light'
     }
   }
-};
+});
+
+export const Input = defineMultiStyleConfig({ baseStyle });

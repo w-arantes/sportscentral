@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   Button,
@@ -12,11 +13,14 @@ import {
   Stack,
   FormControl,
   FormErrorMessage,
-  FormLabel
+  FormLabel,
+  useToast
 } from '@chakra-ui/react';
 
 import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
+import { createUser } from '@/domain/usecases/users/createUser';
+import { UserEntity } from '@/domain/models';
 
 const registerFormSchema = z
   .object({
@@ -39,15 +43,17 @@ const registerFormSchema = z
   });
 
 type RegisterFormData = z.infer<typeof registerFormSchema>;
+type NewUserCredentials = Omit<UserEntity, 'events'>;
 
 export default function SignUp() {
   const { isAuthenticated } = useAuth();
   const { push } = useRouter();
+  const toast = useToast();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema)
   });
@@ -58,10 +64,39 @@ export default function SignUp() {
     }
   }, [isAuthenticated]);
 
-  const onSubmit = (credentials: RegisterFormData) => {
-    console.log('SIGN-UP', credentials);
+  const onSubmit = async (registerForm: RegisterFormData) => {
+    const { name, surname, email, password } = registerForm;
 
-    push('/dashboard');
+    const newUser: NewUserCredentials = {
+      id: uuidv4(),
+      name,
+      surname,
+      email,
+      password,
+      isAdmin: false
+    };
+
+    const { status } = await createUser(newUser);
+
+    if (status === 201) {
+      toast({
+        title: 'Success',
+        description: 'Account created.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+
+      push('/login');
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Unable to create your account.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    }
   };
 
   return (
@@ -135,7 +170,7 @@ export default function SignUp() {
             {errors.confirmPassword && errors.confirmPassword.message}
           </FormErrorMessage>
         </FormControl>
-        <Button type="submit" isLoading={isSubmitting}>
+        <Button type="submit" isLoading={isSubmitting} isDisabled={!isDirty}>
           Register
         </Button>
       </Stack>

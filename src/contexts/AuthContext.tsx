@@ -8,37 +8,31 @@ import {
 import { useRouter } from 'next/router';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 
-import { PLATFORM_SETTINGS } from '@/config';
-import { UserEntity } from '@/entities';
-import { mockUserCredentials } from '@/mock/userCredentials';
-
-type UserCredentials = Omit<UserEntity, 'events'>;
+import { PLATFORM_SETTINGS } from '@/infra/config';
+import { UserEntity } from '@/domain/models';
+import { getUser, updateUser } from '@/domain/usecases/users';
 
 interface SignInCredentials {
   email: string;
   password: string;
 }
 
-interface UpdateProfileCredentials extends UserCredentials {
-  password: string;
+interface AuthProviderProps {
+  children: ReactNode;
 }
 
 interface AuthContextData {
-  signIn: (credentials: SignInCredentials) => void;
+  signIn: (credentials: SignInCredentials) => Promise<boolean>;
   signOut: () => void;
-  updateProfileData: (credentials: UpdateProfileCredentials) => void;
+  updateProfileData: (credentials: UserEntity) => Promise<boolean>;
   isAuthenticated: boolean;
   credentials: UserEntity | null;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [credentials, setCredentials] = useState<UserCredentials | null>(null);
+  const [credentials, setCredentials] = useState<UserEntity | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const { push } = useRouter();
@@ -54,26 +48,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCredentials(JSON.parse(storedCredentials));
       setIsAuthenticated(true);
     } else {
+      setCredentials(null);
       setIsAuthenticated(false);
     }
   }, []);
 
-  const setSession = ({
-    id,
-    name,
-    surname,
-    email,
-    isAdmin
-  }: UserCredentials) => {
-    const credentials = {
-      id,
-      name,
-      surname,
-      email,
-      isAdmin
-    };
-
+  const setSession = (credentials: UserEntity) => {
     setCredentials(credentials);
+
     setCookie(undefined, USER_CREDENTIALS_KEY, JSON.stringify(credentials), {
       maxAge: COOKIE_MAX_AGE,
       path: '/'
@@ -81,29 +63,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const signIn = async ({ email, password }: SignInCredentials) => {
-    console.log('signIn', { email, password });
+    const validCredentials = await getUser({ email, password });
 
-    //TODO: api request for sign-in
-    const signInCredentials = mockUserCredentials;
-
-    if (signInCredentials) {
-      setSession(signInCredentials);
+    if (validCredentials) {
+      setSession(validCredentials);
       setIsAuthenticated(true);
+
+      return true;
     } else {
       setIsAuthenticated(false);
+      return false;
     }
   };
 
-  const updateProfileData = async ({
-    id,
-    email,
-    isAdmin,
-    name,
-    password
-  }: UpdateProfileCredentials) => {
-    console.log('updateProfileData', { id, email, isAdmin, name, password });
+  const updateProfileData = async (newUserData: UserEntity) => {
+    const { data } = await updateUser(newUserData);
 
-    //TODO: api request to update profile data
+    if (data) {
+      setSession(data);
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const clearSession = () => {

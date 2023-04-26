@@ -2,7 +2,7 @@ import { CategoryTag } from '@/components/Categories';
 import { Flex, Text, VStack } from '@chakra-ui/react';
 import { CalendarBlank, MapPin } from '@phosphor-icons/react';
 
-import { EventEntity } from '@/entities';
+import { EventEntity } from '@/domain/models';
 
 interface EventInfoProps
   extends Omit<EventEntity, 'startDate' | 'endDate' | 'id' | 'followers'> {

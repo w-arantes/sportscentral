@@ -15,37 +15,26 @@ import {
   Text,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink
+  BreadcrumbLink,
+  useToast
 } from '@chakra-ui/react';
 
 import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
 
-const userCredentialsFormSchema = z
-  .object({
-    name: z.string().nonempty('Name is required.'),
-    surname: z.string().nonempty('Surname is required.'),
-    email: z.string().nonempty('E-mail is required.').email('Invalid e-mail.'),
-    password: z
-      .string()
-      .nonempty('Password is required.')
-      .min(6, 'Password must be at least 6 characters long.'),
-    confirmPassword: z.string().nonempty('Password confirmation is required.')
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The password confirmation did not match.'
-      });
-    }
-  });
+const userCredentialsFormSchema = z.object({
+  name: z.string().nonempty('Name is required.'),
+  surname: z.string().nonempty('Surname is required.'),
+  email: z.string().nonempty('E-mail is required.').email('Invalid e-mail.')
+});
 
 type ProfileFormData = z.infer<typeof userCredentialsFormSchema>;
 
 export default function ProfileSettings() {
   const { isAuthenticated, credentials, updateProfileData } = useAuth();
   const { push } = useRouter();
+  const toast = useToast();
+
   const {
     register,
     handleSubmit,
@@ -60,20 +49,39 @@ export default function ProfileSettings() {
     }
   }, [isAuthenticated]);
 
-  const onSubmit = (newData: ProfileFormData) => {
-    const { email, name, surname, password } = newData;
+  const onSubmit = async (newData: ProfileFormData) => {
+    const { email, name, surname } = newData;
 
-    if (isAuthenticated && credentials) {
-      const updatedData = {
+    if (credentials) {
+      const newProfileData = {
         id: credentials?.id,
-        isAdmin: credentials?.isAdmin,
         email,
+        isAdmin: credentials?.isAdmin,
         name,
         surname,
-        password
+        password: credentials?.password,
+        events: credentials?.events
       };
 
-      updateProfileData(updatedData);
+      const response = await updateProfileData(newProfileData);
+
+      if (response) {
+        return toast({
+          title: 'Success',
+          description: 'Profile updated with success.',
+          status: 'success',
+          duration: 9000,
+          isClosable: true
+        });
+      } else {
+        return toast({
+          title: 'Error',
+          description: 'Unable to update your profile',
+          status: 'error',
+          duration: 9000,
+          isClosable: true
+        });
+      }
     }
   };
 
@@ -134,30 +142,7 @@ export default function ProfileSettings() {
               {errors.email && errors.email.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={Boolean(errors.password)}>
-            <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              placeholder="password"
-              rounded="none"
-              {...register('password')}
-            />
-            <FormErrorMessage>
-              {errors.password && errors.password.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={Boolean(errors.password)}>
-            <FormLabel>Confirm Password</FormLabel>
-            <Input
-              type="password"
-              placeholder="confirm"
-              rounded="none"
-              {...register('confirmPassword')}
-            />
-            <FormErrorMessage>
-              {errors.confirmPassword && errors.confirmPassword.message}
-            </FormErrorMessage>
-          </FormControl>
+
           <Button type="submit" isLoading={isSubmitting} isDisabled={!isDirty}>
             UPDATE
           </Button>

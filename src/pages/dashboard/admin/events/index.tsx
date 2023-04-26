@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Button,
@@ -13,43 +13,70 @@ import {
   Thead,
   Tr,
   Tooltip,
-  useDisclosure,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink
+  BreadcrumbLink,
+  useToast
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
 import { useAuth } from '@/contexts';
+import { EventEntity } from '@/domain/models';
+import { deleteEvent, getAllEvents } from '@/domain/usecases/events';
 import { formatDate } from '@/helpers';
+
 import { PageLayout } from '@/layout';
-import { events } from '@/mock';
-import { ConfirmDeleteModal } from '@/components/Modal';
 
 export default function ManageEvents() {
-  const { isAuthenticated, credentials } = useAuth();
+  const { credentials } = useAuth();
   const { push } = useRouter();
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const toast = useToast();
+
+  const [events, setEvents] = useState<EventEntity[] | null>(null);
+
+  const getEventsData = async () => {
+    const response = await getAllEvents();
+
+    if (response) {
+      setEvents(response);
+    }
+  };
 
   useEffect(() => {
-    if (isAuthenticated && !credentials?.isAdmin) {
-      push('/dashboard');
-    } else if (!isAuthenticated) {
-      push('/login');
-    }
-  }, [isAuthenticated, credentials]);
+    getEventsData();
+  }, []);
 
   const handleRegisterNew = () => {
-    console.log('handleRegisterNew');
+    push('/dashboard/admin/events/create');
   };
 
-  const handleEditEvent = () => {
-    console.log('handleEditEvent');
+  const handleEditEvent = (eventId: string) => {
+    push(`/dashboard/admin/events/edit/${eventId}`);
   };
 
-  const handleDelete = () => {
-    console.log('handleDelete');
-    onToggle;
+  const handleDeleteEvent = async (eventId: string) => {
+    const { status } = await deleteEvent(eventId);
+
+    if (status === 200) {
+      getEventsData();
+
+      toast({
+        title: 'Success',
+        description: 'Event deleted with success.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description:
+          'Unable to delete the event, try again or contact support.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    }
   };
 
   return (
@@ -103,7 +130,7 @@ export default function ManageEvents() {
             </Thead>
             <Tbody>
               {events &&
-                events.map((event) => {
+                events.map((event: EventEntity) => {
                   return (
                     <Tr key={event.id}>
                       <Td>{event?.id}</Td>
@@ -118,7 +145,7 @@ export default function ManageEvents() {
                             size="md"
                             aria-label="Edit Event"
                             icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={handleEditEvent}
+                            onClick={() => handleEditEvent(event?.id)}
                           />
                         </Tooltip>
                         <Tooltip label="Delete Event" openDelay={500}>
@@ -127,21 +154,13 @@ export default function ManageEvents() {
                             size="md"
                             aria-label="Delete Event"
                             icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={onOpen}
+                            onClick={() => handleDeleteEvent(event?.id)}
                           />
                         </Tooltip>
                       </Td>
                     </Tr>
                   );
                 })}
-              <ConfirmDeleteModal
-                dialogText="Are you sure you want to delete this event?"
-                confirmLabel="YES"
-                cancelLabel="NO"
-                onConfirm={handleDelete}
-                closeDialog={onClose}
-                dialogState={isOpen}
-              />
             </Tbody>
           </Table>
         </TableContainer>

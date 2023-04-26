@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Button,
@@ -13,42 +13,68 @@ import {
   Thead,
   Tr,
   Tooltip,
-  useDisclosure,
+  useToast,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
-import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
-import { users } from '@/mock';
-import { ConfirmDeleteModal } from '@/components/Modal';
+import { UserEntity } from '@/domain/models';
+import { getAllUsers, deleteUser } from '@/domain/usecases/users';
+import { PageLayout } from '@/layout';
 
 export default function ManageUsers() {
-  const { isAuthenticated, credentials } = useAuth();
+  const { credentials } = useAuth();
   const { push } = useRouter();
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+
+  const toast = useToast();
+
+  const [users, setUsers] = useState<UserEntity[] | null>(null);
+
+  const getUsersData = async () => {
+    const response = await getAllUsers();
+
+    if (response) {
+      setUsers(response);
+    }
+  };
 
   useEffect(() => {
-    if (isAuthenticated && !credentials?.isAdmin) {
-      push('/dashboard');
-    } else if (!isAuthenticated) {
-      push('/login');
-    }
-  }, [isAuthenticated, credentials]);
+    getUsersData();
+  }, []);
 
   const handleRegisterNew = () => {
-    console.log('handleRegisterNew');
+    push('/dashboard/admin/users/create');
   };
 
-  const handleEditUser = () => {
-    console.log('handleEditUser');
+  const handleEditUser = (userId: string) => {
+    push(`/dashboard/admin/users/edit/${userId}`);
   };
 
-  const handleDelete = () => {
-    console.log('handleDelete');
-    onToggle;
+  const handleDeleteUser = async (userId: string) => {
+    const { status } = await deleteUser(userId);
+
+    if (status === 200) {
+      getUsersData();
+
+      toast({
+        title: 'Success',
+        description: 'User deleted with success.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description: 'Unable to delete the user, try again or contact support.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    }
   };
 
   return (
@@ -102,7 +128,7 @@ export default function ManageUsers() {
             </Thead>
             <Tbody>
               {users &&
-                users.map((user) => {
+                users.map((user: UserEntity) => {
                   return (
                     <Tr key={user.id}>
                       <Td>{user?.id}</Td>
@@ -117,7 +143,7 @@ export default function ManageUsers() {
                             size="md"
                             aria-label="Edit User"
                             icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={handleEditUser}
+                            onClick={() => handleEditUser(user?.id)}
                           />
                         </Tooltip>
                         <Tooltip label="Delete User" openDelay={500}>
@@ -126,21 +152,13 @@ export default function ManageUsers() {
                             size="md"
                             aria-label="Delete User"
                             icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={onOpen}
+                            onClick={() => handleDeleteUser(user?.id)}
                           />
                         </Tooltip>
                       </Td>
                     </Tr>
                   );
                 })}
-              <ConfirmDeleteModal
-                dialogText="Are you sure you want to delete the user?"
-                confirmLabel="YES"
-                cancelLabel="NO"
-                onConfirm={handleDelete}
-                closeDialog={onClose}
-                dialogState={isOpen}
-              />
             </Tbody>
           </Table>
         </TableContainer>

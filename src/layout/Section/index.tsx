@@ -7,6 +7,10 @@ interface SectionProps extends FlexProps {
   title: string;
   isLoading?: boolean;
   isLoadingCategories?: boolean;
+  footerLink?: boolean;
+  url?: string;
+  showTotal?: boolean;
+  total?: number | null;
 }
 
 export function Section({
@@ -14,6 +18,10 @@ export function Section({
   title,
   isLoading = false,
   isLoadingCategories = false,
+  footerLink = false,
+  url,
+  showTotal = false,
+  total,
   ...rest
 }: SectionProps) {
   return (
@@ -26,13 +34,24 @@ export function Section({
       mb="2rem"
       {...rest}
     >
-      <Flex direction="row" justify="flex-start">
+      <Flex direction="row" justify="flex-start" align="center">
         <Text fontSize="title" fontWeight="bold">
           {title}
         </Text>
+        {showTotal && (
+          <Text fontSize="h2" ml="1rem">
+            ({total})
+          </Text>
+        )}
       </Flex>
 
-      <Flex direction="row" align="center" justify="center" mt="1rem" mb="1rem">
+      <Flex
+        direction="row"
+        align="center"
+        justify="flex-start"
+        mt="1rem"
+        mb="1rem"
+      >
         <Stack direction="row" spacing="2rem">
           {isLoading || isLoadingCategories ? (
             <>
@@ -60,21 +79,23 @@ export function Section({
         </Stack>
       </Flex>
 
-      <Flex direction="row" justify="flex-start">
-        <Link
-          as={NextLink}
-          href={`/dashboard/view-all/${title.toLowerCase()}`}
-          _hover={{
-            textDecoration: 'none',
-            color: 'brand.primary',
-            transition: 'color 0.5s ease'
-          }}
-        >
-          <Text fontSize="h2" fontWeight="bold">
-            VIEW ALL
-          </Text>
-        </Link>
-      </Flex>
+      {footerLink && (
+        <Flex direction="row" justify="flex-start">
+          <Link
+            as={NextLink}
+            href={`${url}`}
+            _hover={{
+              textDecoration: 'none',
+              color: 'brand.primary',
+              transition: 'color 0.5s ease'
+            }}
+          >
+            <Text fontSize="h2" fontWeight="bold">
+              VIEW ALL
+            </Text>
+          </Link>
+        </Flex>
+      )}
     </Flex>
   );
 }
