@@ -15,7 +15,11 @@ import {
   FormErrorMessage,
   FormLabel,
   useToast,
-  Select
+  Select,
+  Flex,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink
 } from '@chakra-ui/react';
 
 import { PageLayout } from '@/layout';
@@ -55,7 +59,7 @@ export default function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema)
   });
@@ -97,6 +101,30 @@ export default function SignUp() {
 
   return (
     <PageLayout title="Create New User">
+      <Flex align="center" justify="flex-start" w="100%" h="56px">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink>Admin</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink href={'/dashboard/admin/users'}>
+              Users
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink
+              isCurrentPage
+              href={'/dashboard/admin/users/create'}
+            >
+              Create User
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
+      </Flex>
+
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
@@ -145,8 +173,12 @@ export default function SignUp() {
         <FormControl isInvalid={Boolean(errors.isAdmin)}>
           <FormLabel>Profile Type</FormLabel>
           <Select placeholder="Select" rounded="none" {...register('isAdmin')}>
-            <option value="true">Admin</option>
-            <option value="false">User</option>
+            <Text as="option" value="true" color="gray.medium">
+              Admin
+            </Text>
+            <Text as="option" value="false" color="gray.medium">
+              User
+            </Text>
           </Select>
           <FormErrorMessage>
             {errors.isAdmin && errors.isAdmin.message}
@@ -176,7 +208,7 @@ export default function SignUp() {
             {errors.confirmPassword && errors.confirmPassword.message}
           </FormErrorMessage>
         </FormControl>
-        <Button type="submit" isLoading={isSubmitting}>
+        <Button type="submit" isLoading={isSubmitting} isDisabled={!isDirty}>
           Register
         </Button>
       </Stack>
