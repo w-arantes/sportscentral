@@ -36,8 +36,8 @@ const registerEventFormSchema = z.object({
     .string()
     .max(140, 'The description must contain a maximum of 140 characters.'),
   category: z.string().nonempty('Category is required.'),
-  startDate: z.string(),
-  endDate: z.string(),
+  startDate: z.string().transform((value) => new Date(value).toISOString()),
+  endDate: z.string().transform((value) => new Date(value).toISOString()),
   location: z
     .string()
     .nonempty('Event location is required.')
