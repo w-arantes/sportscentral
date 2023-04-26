@@ -7,7 +7,7 @@ import { getEventsByCategory } from '@/domain/usecases/events';
 
 import { PageLayout, Section } from '@/layout';
 import { CategoryHeader } from '@/components/Categories';
-import { EventCard } from '@/components/Event';
+import { EventCard, NoEventsCard } from '@/components/Event';
 
 interface EventsByCategoryProps {
   events: EventEntity[];
@@ -25,21 +25,26 @@ export default function EventsByCategory({
       <CategoryHeader categoryName={category} />
 
       <Section title="All Events">
-        {events &&
-          events.map((event: EventEntity) => {
-            return (
-              <EventCard
-                key={event.id}
-                id={event.id}
-                title={event.title}
-                category={event.category}
-                startDate={event.startDate}
-                endDate={event.endDate}
-                location={event.location}
-                followers={event.followers}
-              />
-            );
-          })}
+        {events && events.length > 0 ? (
+          <>
+            {events.map((event: EventEntity) => {
+              return (
+                <EventCard
+                  key={event.id}
+                  id={event.id}
+                  title={event.title}
+                  category={event.category}
+                  startDate={event.startDate}
+                  endDate={event.endDate}
+                  location={event.location}
+                  followers={event.followers}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoEventsCard />
+        )}
       </Section>
     </PageLayout>
   );

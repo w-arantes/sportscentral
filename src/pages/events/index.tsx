@@ -5,8 +5,8 @@ import { CategoryEntity, EventEntity } from '@/domain/models';
 import { getAllEvents } from '@/domain/usecases/events';
 
 import { PageLayout, Section } from '@/layout';
-import { EventCard, EventsHeader } from '@/components/Event';
-import { CategoryCard } from '@/components/Categories';
+import { EventCard, NoEventsCard, EventsHeader } from '@/components/Event';
+import { CategoryCard, NoCategoriesCard } from '@/components/Categories';
 import { getAllCategories } from '@/domain/usecases/categories';
 
 interface EventsProps {
@@ -20,33 +20,43 @@ export default function Events({ events, categories }: EventsProps) {
       <EventsHeader />
 
       <Section title="Available Events">
-        {events &&
-          events.map((event: EventEntity) => {
-            return (
-              <EventCard
-                key={event.id}
-                id={event.id}
-                title={event.title}
-                category={event.category}
-                startDate={event.startDate}
-                endDate={event.endDate}
-                location={event.location}
-                followers={event.followers}
-              />
-            );
-          })}
+        {events && events.length > 0 ? (
+          <>
+            {events.map((event: EventEntity) => {
+              return (
+                <EventCard
+                  key={event.id}
+                  id={event.id}
+                  title={event.title}
+                  category={event.category}
+                  startDate={event.startDate}
+                  endDate={event.endDate}
+                  location={event.location}
+                  followers={event.followers}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoEventsCard />
+        )}
       </Section>
       <Section title="Available Categories" height="250px">
-        {categories &&
-          categories.map((category: CategoryEntity) => {
-            return (
-              <CategoryCard
-                key={category.id}
-                id={category.id}
-                name={category.name}
-              />
-            );
-          })}
+        {categories && categories.length > 0 ? (
+          <>
+            {categories.map((category: CategoryEntity) => {
+              return (
+                <CategoryCard
+                  key={category.id}
+                  id={category.id}
+                  name={category.name}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoCategoriesCard />
+        )}
       </Section>
     </PageLayout>
   );

@@ -113,7 +113,7 @@ export default function Dashboard() {
             })}
           </>
         ) : (
-          <NoEventsCard message="No available events to show" />
+          <NoEventsCard />
         )}
       </Section>
       <Section
@@ -134,7 +134,7 @@ export default function Dashboard() {
             })}
           </>
         ) : (
-          <NoCategoriesCard message="No available categories to show" />
+          <NoCategoriesCard />
         )}
       </Section>
     </PageLayout>
