@@ -1,4 +1,4 @@
-import { Flex, Img, Text } from '@chakra-ui/react';
+import { Flex, Image, Text } from '@chakra-ui/react';
 
 export function Footer() {
   const CURRENT_YEAR = new Date().getFullYear();
@@ -17,7 +17,7 @@ export function Footer() {
       right="0"
       pt="1rem"
     >
-      <Img
+      <Image
         src="/branding/icon.svg"
         alt="SportsCentral icon composed by a rectangle with brand primary color (green) and SportsCentral initials (S and C)."
         w="40px"

@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import { Flex, Box, Text, Img, Link, Stack, Tooltip } from '@chakra-ui/react';
+import { Flex, Box, Text, Image, Link, Stack, Tooltip } from '@chakra-ui/react';
 import { CalendarBlank, MapPin, Heart } from '@phosphor-icons/react';
 
 import { EventEntity } from '@/domain/models';
@@ -36,12 +36,13 @@ export function EventCard({
             transition: 'border-color 0.2s'
           }}
         >
-          <Box w="100%" h="160px">
-            <Img
+          <Box width="100%" height="160px">
+            <Image
               src={`/images/categories/${category}.png`}
               alt={`Event category default image - ${category}`}
-              w="100%"
-              h="160px"
+              fallbackSrc="/images/categories/default.png"
+              width="100%"
+              height="160px"
               objectFit="cover"
             />
           </Box>

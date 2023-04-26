@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import {
   Flex,
   HStack,
-  Img,
+  Image,
   Tooltip,
   Avatar,
   Button,
@@ -34,7 +34,7 @@ export function Header() {
       left="0"
       right="0"
     >
-      <Img
+      <Image
         src="/branding/logo.svg"
         alt="Logo composed with the company name and icon"
         w="200px"
