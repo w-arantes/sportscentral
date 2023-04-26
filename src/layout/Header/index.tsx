@@ -52,7 +52,7 @@ export function Header() {
                   </MenuItem>
                 </Tooltip>
                 <Tooltip label="Manage Events" openDelay={1000}>
-                  <MenuItem as="a" href="/dashboard/following">
+                  <MenuItem as="a" href="/dashboard/subscriptions">
                     SUBSCRIPTIONS
                   </MenuItem>
                 </Tooltip>
