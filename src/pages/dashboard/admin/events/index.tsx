@@ -118,6 +118,7 @@ export default function ManageEvents() {
               <Text color="white">All Events: {events?.length}</Text>
               <Button onClick={handleRegisterNew}>NEW EVENT</Button>
             </Flex>
+
             <TableContainer mt="2rem">
               <Table variant="simple">
                 <Thead>
@@ -131,40 +132,37 @@ export default function ManageEvents() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {events &&
-                    events.map((event: EventEntity) => {
-                      return (
-                        <Tr key={event.id}>
-                          <Td>{event.id}</Td>
-                          <Td>{event.title}</Td>
-                          <Td>{event.category}</Td>
-                          <Td>{formatDate(event?.startDate)}</Td>
-                          <Td>{formatDate(event?.endDate)}</Td>
-                          <Td>
-                            <Tooltip label="Edit Event" openDelay={500}>
-                              <IconButton
-                                variant="unstyled"
-                                size="md"
-                                aria-label="Edit Event"
-                                icon={
-                                  <PencilSimple size={20} color="#00B37E" />
-                                }
-                                onClick={() => handleEditEvent(event.id)}
-                              />
-                            </Tooltip>
-                            <Tooltip label="Delete Event" openDelay={500}>
-                              <IconButton
-                                variant="unstyled"
-                                size="md"
-                                aria-label="Delete Event"
-                                icon={<TrashSimple size={20} color="#F75A68" />}
-                                onClick={() => handleDeleteEvent(event.id)}
-                              />
-                            </Tooltip>
-                          </Td>
-                        </Tr>
-                      );
-                    })}
+                  {events.map((event: EventEntity) => {
+                    return (
+                      <Tr key={event.id}>
+                        <Td>{event.id}</Td>
+                        <Td>{event.title}</Td>
+                        <Td>{event.category}</Td>
+                        <Td>{formatDate(event?.startDate)}</Td>
+                        <Td>{formatDate(event?.endDate)}</Td>
+                        <Td>
+                          <Tooltip label="Edit Event" openDelay={500}>
+                            <IconButton
+                              variant="unstyled"
+                              size="md"
+                              aria-label="Edit Event"
+                              icon={<PencilSimple size={20} color="#00B37E" />}
+                              onClick={() => handleEditEvent(event.id)}
+                            />
+                          </Tooltip>
+                          <Tooltip label="Delete Event" openDelay={500}>
+                            <IconButton
+                              variant="unstyled"
+                              size="md"
+                              aria-label="Delete Event"
+                              icon={<TrashSimple size={20} color="#F75A68" />}
+                              onClick={() => handleDeleteEvent(event.id)}
+                            />
+                          </Tooltip>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
             </TableContainer>

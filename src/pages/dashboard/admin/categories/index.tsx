@@ -117,6 +117,7 @@ export default function ManageCategories() {
               <Text color="white">All Categories: {categories?.length}</Text>
               <Button onClick={handleRegisterNew}>NEW CATEGORY</Button>
             </Flex>
+
             <TableContainer mt="2rem">
               <Table variant="simple">
                 <Thead>
