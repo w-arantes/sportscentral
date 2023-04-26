@@ -15,7 +15,8 @@ import {
   Tooltip,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink
+  BreadcrumbLink,
+  useToast
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
@@ -29,6 +30,7 @@ import { PageLayout } from '@/layout';
 export default function ManageEvents() {
   const { credentials } = useAuth();
   const { push } = useRouter();
+  const toast = useToast();
 
   const [events, setEvents] = useState<EventEntity[] | null>(null);
 
@@ -41,28 +43,40 @@ export default function ManageEvents() {
   };
 
   useEffect(() => {
-    if (!credentials?.isAdmin) {
-      push('/dashboard');
-    }
-  }, [credentials]);
-
-  useEffect(() => {
     getEventsData();
   }, []);
 
   const handleRegisterNew = () => {
-    console.log('handleRegisterNew');
+    push('/dashboard/events/create');
   };
 
-  const handleEditEvent = () => {
-    console.log('handleEditEvent');
+  const handleEditEvent = (eventId: string) => {
+    push(`/dashboard/admin/events/edit/${eventId}`);
   };
 
   const handleDeleteEvent = async (eventId: string) => {
-    const response = deleteEvent(eventId);
-    console.log(response);
+    const { status } = await deleteEvent(eventId);
 
-    getEventsData();
+    if (status === 200) {
+      getEventsData();
+
+      toast({
+        title: 'Success',
+        description: 'Event deleted with success.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description:
+          'Unable to delete the event, try again or contact support.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    }
   };
 
   return (
@@ -131,7 +145,7 @@ export default function ManageEvents() {
                             size="md"
                             aria-label="Edit Event"
                             icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={handleEditEvent}
+                            onClick={() => handleEditEvent(event?.id)}
                           />
                         </Tooltip>
                         <Tooltip label="Delete Event" openDelay={500}>
