@@ -11,5 +11,6 @@ export const colors = {
   },
 
   white: '#FFFF',
-  tag: 'rgba(209, 223, 50, 0.5);'
+  tag: 'rgba(209, 223, 50, 0.5);',
+  shadow: 'rgba(32, 32, 36, 0.2)'
 };

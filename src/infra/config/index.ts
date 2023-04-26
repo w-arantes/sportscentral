@@ -12,6 +12,7 @@ interface PlatformSettingsProps {
   };
   ssr: {
     pages: {
+      HOMEPAGE_REVALIDATION: number;
       EVENTS_REVALIDATION: number;
       EVENT_REVALIDATION: number;
       EVENTS_BY_CATEGORY_REVALIDATION: number;
@@ -26,6 +27,7 @@ export const PLATFORM_SETTINGS: PlatformSettingsProps = {
   },
   ssr: {
     pages: {
+      HOMEPAGE_REVALIDATION: 60 * 60 * 12, // 12 hours
       EVENTS_REVALIDATION: 60 * 60 * 12, // 12 hours
       EVENT_REVALIDATION: 60 * 60 * 12, // 12 hours
       EVENTS_BY_CATEGORY_REVALIDATION: 60 * 60 * 12 // 12 hours

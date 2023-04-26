@@ -96,11 +96,18 @@ export function Header() {
             />
           </>
         ) : (
-          <Tooltip label="Log-in into SportsCentral" openDelay={500}>
-            <Button variant="header" onClick={() => push('/login')}>
-              LOGIN
-            </Button>
-          </Tooltip>
+          <>
+            <Tooltip label="Log-in into SportsCentral" openDelay={500}>
+              <Button variant="header" onClick={() => push('/login')}>
+                LOGIN
+              </Button>
+            </Tooltip>
+            <Tooltip label="Sign-in into SportsCentral" openDelay={500}>
+              <Button variant="header" onClick={() => push('/sign-in')}>
+                SIGN-IN
+              </Button>
+            </Tooltip>
+          </>
         )}
       </HStack>
     </Flex>
