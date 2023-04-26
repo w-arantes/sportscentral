@@ -1,3 +1,4 @@
+export * from './createEvent';
 export * from './getEvent';
 export * from './getAllEvents';
 export * from './getEventsByCategory';
