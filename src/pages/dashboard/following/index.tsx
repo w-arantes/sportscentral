@@ -40,12 +40,6 @@ export default function FollowingEvents() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      push('/login');
-    }
-  }, [isAuthenticated]);
-
   return (
     <PageLayout title="All Subscriptions">
       <Flex align="center" justify="flex-start" w="100%" h="56px">
