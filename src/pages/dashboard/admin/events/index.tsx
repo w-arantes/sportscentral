@@ -16,7 +16,8 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  useToast
+  useToast,
+  Spinner
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
@@ -111,59 +112,66 @@ export default function ManageEvents() {
         mt="2rem"
         p="4rem"
       >
-        <Flex direction="row" align="center" justify="space-between">
-          <Text color="white">All Events: {events?.length}</Text>
-          <Button onClick={handleRegisterNew}>NEW EVENT</Button>
-        </Flex>
-
-        <TableContainer mt="2rem">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th color="gray.light">Id</Th>
-                <Th color="gray.light">Title</Th>
-                <Th color="gray.light">Category</Th>
-                <Th color="gray.light">Start Date</Th>
-                <Th color="gray.light">End Date</Th>
-                <Th color="gray.light">Actions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {events &&
-                events.map((event: EventEntity) => {
-                  return (
-                    <Tr key={event.id}>
-                      <Td>{event?.id}</Td>
-                      <Td>{event?.title}</Td>
-                      <Td>{event?.category}</Td>
-                      <Td>{formatDate(event?.startDate)}</Td>
-                      <Td>{formatDate(event?.endDate)}</Td>
-                      <Td>
-                        <Tooltip label="Edit Event" openDelay={500}>
-                          <IconButton
-                            variant="unstyled"
-                            size="md"
-                            aria-label="Edit Event"
-                            icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={() => handleEditEvent(event?.id)}
-                          />
-                        </Tooltip>
-                        <Tooltip label="Delete Event" openDelay={500}>
-                          <IconButton
-                            variant="unstyled"
-                            size="md"
-                            aria-label="Delete Event"
-                            icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={() => handleDeleteEvent(event?.id)}
-                          />
-                        </Tooltip>
-                      </Td>
-                    </Tr>
-                  );
-                })}
-            </Tbody>
-          </Table>
-        </TableContainer>
+        {events && events.length > 0 ? (
+          <>
+            <Flex direction="row" align="center" justify="space-between">
+              <Text color="white">All Events: {events?.length}</Text>
+              <Button onClick={handleRegisterNew}>NEW EVENT</Button>
+            </Flex>
+            <TableContainer mt="2rem">
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th color="gray.light">Id</Th>
+                    <Th color="gray.light">Title</Th>
+                    <Th color="gray.light">Category</Th>
+                    <Th color="gray.light">Start Date</Th>
+                    <Th color="gray.light">End Date</Th>
+                    <Th color="gray.light">Actions</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {events &&
+                    events.map((event: EventEntity) => {
+                      return (
+                        <Tr key={event.id}>
+                          <Td>{event.id}</Td>
+                          <Td>{event.title}</Td>
+                          <Td>{event.category}</Td>
+                          <Td>{formatDate(event?.startDate)}</Td>
+                          <Td>{formatDate(event?.endDate)}</Td>
+                          <Td>
+                            <Tooltip label="Edit Event" openDelay={500}>
+                              <IconButton
+                                variant="unstyled"
+                                size="md"
+                                aria-label="Edit Event"
+                                icon={
+                                  <PencilSimple size={20} color="#00B37E" />
+                                }
+                                onClick={() => handleEditEvent(event.id)}
+                              />
+                            </Tooltip>
+                            <Tooltip label="Delete Event" openDelay={500}>
+                              <IconButton
+                                variant="unstyled"
+                                size="md"
+                                aria-label="Delete Event"
+                                icon={<TrashSimple size={20} color="#F75A68" />}
+                                onClick={() => handleDeleteEvent(event.id)}
+                              />
+                            </Tooltip>
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
+        ) : (
+          <Spinner />
+        )}
       </Flex>
     </PageLayout>
   );
