@@ -53,7 +53,7 @@ export default function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema)
   });
@@ -170,7 +170,7 @@ export default function SignUp() {
             {errors.confirmPassword && errors.confirmPassword.message}
           </FormErrorMessage>
         </FormControl>
-        <Button type="submit" isLoading={isSubmitting}>
+        <Button type="submit" isLoading={isSubmitting} isDisabled={!isDirty}>
           Register
         </Button>
       </Stack>
