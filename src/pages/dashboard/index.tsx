@@ -7,8 +7,8 @@ import { getAllEvents } from '@/domain/usecases/events';
 import { getAllCategories } from '@/domain/usecases/categories';
 
 import { PageLayout, Section } from '@/layout';
-import { CategoryCard } from '@/components/Categories';
-import { EventCard } from '@/components/Event';
+import { CategoryCard, NoCategoriesCard } from '@/components/Categories';
+import { EventCard, NoEventsCard } from '@/components/Event';
 import { getUserEvents } from '@/domain/usecases/users';
 
 export default function Dashboard() {
@@ -73,54 +73,69 @@ export default function Dashboard() {
   return (
     <PageLayout title="Dashboard | SportsCentral">
       <Section title="Following" isLoading={isFetchingData}>
-        {following &&
-          following?.map((event: EventEntity) => {
-            return (
-              <EventCard
-                key={event.id}
-                id={event.id}
-                title={event.title}
-                category={event.category}
-                startDate={event.startDate}
-                endDate={event.endDate}
-                location={event.location}
-                followers={event.followers}
-              />
-            );
-          })}
+        {following && following.length > 0 ? (
+          <>
+            {following?.map((event: EventEntity) => {
+              return (
+                <EventCard
+                  key={event.id}
+                  id={event.id}
+                  title={event.title}
+                  category={event.category}
+                  startDate={event.startDate}
+                  endDate={event.endDate}
+                  location={event.location}
+                  followers={event.followers}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoEventsCard message="No following events to show" />
+        )}
       </Section>
       <Section title="Events" isLoading={isFetchingData}>
-        {events &&
-          events?.map((event: EventEntity) => {
-            return (
-              <EventCard
-                key={event.id}
-                id={event.id}
-                title={event.title}
-                category={event.category}
-                startDate={event.startDate}
-                endDate={event.endDate}
-                location={event.location}
-                followers={event.followers}
-              />
-            );
-          })}
+        {events && events.length > 0 ? (
+          <>
+            {events?.map((event: EventEntity) => {
+              return (
+                <EventCard
+                  key={event.id}
+                  id={event.id}
+                  title={event.title}
+                  category={event.category}
+                  startDate={event.startDate}
+                  endDate={event.endDate}
+                  location={event.location}
+                  followers={event.followers}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoEventsCard message="No available events to show" />
+        )}
       </Section>
       <Section
         title="Categories"
         isLoadingCategories={isFetchingData}
         height="250px"
       >
-        {categories &&
-          categories?.map((category: CategoryEntity) => {
-            return (
-              <CategoryCard
-                key={category.id}
-                id={category.id}
-                name={category.name}
-              />
-            );
-          })}
+        {categories && categories.length > 0 ? (
+          <>
+            {categories?.map((category: CategoryEntity) => {
+              return (
+                <CategoryCard
+                  key={category.id}
+                  id={category.id}
+                  name={category.name}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <NoCategoriesCard message="No available categories to show" />
+        )}
       </Section>
     </PageLayout>
   );
