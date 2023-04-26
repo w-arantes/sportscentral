@@ -19,9 +19,9 @@ export function EventFollowers({ followers }: EventFollowers) {
         Following {`(${followers?.length})`}
       </Text>
       <VStack spacing="0.5rem" mt="1rem" w="100%" h="100%" align="flex-start">
-        {followers &&
+        {followers.length > 0 &&
           followers.map((user: UserEntity) => {
-            return <Text key={user.id}>{user.name}</Text>;
+            return <Text key={user.id}>{user.name + ' ' + user.surname}</Text>;
           })}
       </VStack>
     </Flex>

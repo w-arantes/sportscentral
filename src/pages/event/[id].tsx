@@ -6,7 +6,11 @@ import { Button, Flex, HStack, Img, useToast } from '@chakra-ui/react';
 import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
 import { EventEntity, UserEntity } from '@/domain/models';
-import { getEvent, getAllEvents } from '@/domain/usecases/events';
+import {
+  getEvent,
+  getAllEvents,
+  getEventFollowers
+} from '@/domain/usecases/events';
 import { removeUserEvent, updateUserEvents } from '@/domain/usecases/users';
 import { formatDateRange } from '@/helpers';
 
@@ -28,6 +32,8 @@ export default function EventPage({
   const toast = useToast();
 
   const [isFollowingEvent, setIsFollowingEvent] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [eventFollowers, setEventFollowers] = useState(followers);
 
   const currentEvent = {
     id,
@@ -61,15 +67,40 @@ export default function EventPage({
     }
   }, [credentials]);
 
+  const updateEventFollowers = async (type: string) => {
+    if (credentials) {
+      const currentUser = {
+        id: credentials.id,
+        name: credentials.name,
+        surname: credentials.surname
+      };
+
+      const updatedInfo = await getEventFollowers(
+        currentEvent,
+        currentUser,
+        type
+      );
+
+      if (updatedInfo) {
+        setEventFollowers(updatedInfo);
+      }
+    }
+  };
+
   const handleEditEvent = () => {
     console.log('EDIT EVENT');
   };
 
   const handleUnfollow = async (eventId: string) => {
+    setIsLoading(true);
+
     const { data } = await removeUserEvent(credentials as UserEntity, eventId);
 
     if (data) {
+      const UPDATE_TYPE_KEY = 'unfollow';
+
       updateProfileData(data);
+      updateEventFollowers(UPDATE_TYPE_KEY);
     } else {
       toast({
         title: 'Error',
@@ -80,13 +111,18 @@ export default function EventPage({
         isClosable: true
       });
     }
+
+    setIsLoading(false);
   };
 
   const handleFollowEvent = async (event: EventEntity) => {
+    setIsLoading(true);
+
     const { data } = await updateUserEvents(credentials as UserEntity, event);
 
     if (data) {
       updateProfileData(data);
+      updateEventFollowers(event.id);
     } else {
       toast({
         title: 'Error',
@@ -97,6 +133,8 @@ export default function EventPage({
         isClosable: true
       });
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -136,6 +174,7 @@ export default function EventPage({
               <Button
                 variant="outline"
                 onClick={() => handleUnfollow(currentEvent.id)}
+                isLoading={isLoading}
               >
                 UNFOLLOW EVENT
               </Button>
@@ -143,6 +182,7 @@ export default function EventPage({
               <Button
                 variant="solid"
                 onClick={() => handleFollowEvent(currentEvent)}
+                isLoading={isLoading}
               >
                 FOLLOW EVENT
               </Button>
@@ -162,7 +202,7 @@ export default function EventPage({
         )}
       </HStack>
 
-      <EventFollowers followers={followers} />
+      <EventFollowers followers={eventFollowers} />
     </PageLayout>
   );
 }
