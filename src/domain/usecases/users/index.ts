@@ -1,4 +1,5 @@
 export * from './getUser';
+export * from './getUserById';
 export * from './getAllUsers';
 export * from './getUserEvents';
 export * from './createUser';

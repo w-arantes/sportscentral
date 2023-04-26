@@ -28,6 +28,7 @@ import { PageLayout } from '@/layout';
 export default function ManageUsers() {
   const { credentials } = useAuth();
   const { push } = useRouter();
+
   const toast = useToast();
 
   const [users, setUsers] = useState<UserEntity[] | null>(null);
@@ -41,27 +42,21 @@ export default function ManageUsers() {
   };
 
   useEffect(() => {
-    if (!credentials?.isAdmin) {
-      push('/dashboard');
-    }
-  }, [credentials]);
-
-  useEffect(() => {
     getUsersData();
   }, []);
 
   const handleRegisterNew = () => {
-    console.log('handleRegisterNew');
+    push('/dashboard/admin/users/create');
   };
 
-  const handleEditUser = () => {
-    console.log('handleEditUser');
+  const handleEditUser = (userId: string) => {
+    push(`/dashboard/admin/users/edit/${userId}`);
   };
 
   const handleDeleteUser = async (userId: string) => {
     const { status } = await deleteUser(userId);
 
-    if (status === 201) {
+    if (status === 200) {
       getUsersData();
 
       toast({
@@ -75,7 +70,7 @@ export default function ManageUsers() {
       toast({
         title: 'Error',
         description: 'Unable to delete the user, try again or contact support.',
-        status: 'success',
+        status: 'error',
         duration: 9000,
         isClosable: true
       });
@@ -148,7 +143,7 @@ export default function ManageUsers() {
                             size="md"
                             aria-label="Edit User"
                             icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={handleEditUser}
+                            onClick={() => handleEditUser(user?.id)}
                           />
                         </Tooltip>
                         <Tooltip label="Delete User" openDelay={500}>
