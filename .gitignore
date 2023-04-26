@@ -42,4 +42,4 @@ next-env.d.ts
 REQUIREMENTS.md
 
 #local db
-./src/data
+/src/data/server.json
