@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/branding/logo.svg" alt="SportsCentral Logo">
+  <img src="./public/branding/logo-docs.png" alt="SportsCentral Logo">
 </p>
 
 <br />
