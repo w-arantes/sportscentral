@@ -8,7 +8,9 @@ interface SectionProps extends FlexProps {
   isLoading?: boolean;
   isLoadingCategories?: boolean;
   footerLink?: boolean;
-  linkUrl?: string;
+  url?: string;
+  showTotal?: boolean;
+  total?: number | null;
 }
 
 export function Section({
@@ -17,6 +19,9 @@ export function Section({
   isLoading = false,
   isLoadingCategories = false,
   footerLink = false,
+  url,
+  showTotal = false,
+  total,
   ...rest
 }: SectionProps) {
   return (
@@ -29,10 +34,15 @@ export function Section({
       mb="2rem"
       {...rest}
     >
-      <Flex direction="row" justify="flex-start">
+      <Flex direction="row" justify="flex-start" align="center">
         <Text fontSize="title" fontWeight="bold">
           {title}
         </Text>
+        {showTotal && (
+          <Text fontSize="h2" ml="1rem">
+            ({total})
+          </Text>
+        )}
       </Flex>
 
       <Flex
@@ -73,7 +83,7 @@ export function Section({
         <Flex direction="row" justify="flex-start">
           <Link
             as={NextLink}
-            href={`/dashboard/view-all/${title.toLowerCase()}`}
+            href={`${url}`}
             _hover={{
               textDecoration: 'none',
               color: 'brand.primary',

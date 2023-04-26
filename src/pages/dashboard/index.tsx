@@ -72,7 +72,14 @@ export default function Dashboard() {
 
   return (
     <PageLayout title="Dashboard | SportsCentral">
-      <Section title="Following" isLoading={isFetchingData}>
+      <Section
+        title="Following"
+        isLoading={isFetchingData}
+        footerLink={following && following.length > 0 ? true : false}
+        url="/dashboard/following"
+        showTotal
+        total={following && following.length}
+      >
         {following && following.length > 0 ? (
           <>
             {following?.map((event: EventEntity) => {
@@ -94,7 +101,14 @@ export default function Dashboard() {
           <NoEventsCard message="No following events to show" />
         )}
       </Section>
-      <Section title="Events" isLoading={isFetchingData}>
+      <Section
+        title="Events"
+        isLoading={isFetchingData}
+        footerLink
+        url="/events"
+        showTotal
+        total={events && events.length}
+      >
         {events && events.length > 0 ? (
           <>
             {events?.map((event: EventEntity) => {
