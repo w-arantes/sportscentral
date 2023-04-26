@@ -140,7 +140,10 @@ export default function EditEvent() {
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={`/dashboard/admin/edit/${currentEventId}`}>
+            <BreadcrumbLink
+              isCurrentPage
+              href={`/dashboard/admin/edit/${currentEventId}`}
+            >
               {currentEventId}
             </BreadcrumbLink>
           </BreadcrumbItem>

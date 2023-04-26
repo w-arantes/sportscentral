@@ -47,7 +47,7 @@ export default function ManageEvents() {
   }, []);
 
   const handleRegisterNew = () => {
-    push('/dashboard/events/create');
+    push('/dashboard/admin/events/create');
   };
 
   const handleEditEvent = (eventId: string) => {

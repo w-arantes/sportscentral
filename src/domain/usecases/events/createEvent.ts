@@ -11,7 +11,7 @@ export const createEvent = async ({
   location
 }: Omit<EventEntity, 'followers'>) => {
   try {
-    const { status } = await httpClient.post('/events', {
+    const response = await httpClient.post('/events', {
       id,
       title,
       description,
@@ -22,7 +22,7 @@ export const createEvent = async ({
       followers: []
     });
 
-    return status;
+    return response;
   } catch (error) {
     console.error(error);
     throw new Error('Unable to create event.');
