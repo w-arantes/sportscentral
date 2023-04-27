@@ -2,9 +2,9 @@
   "users": [
     {
       "id": "800532af-4b1a-4f1f-8feb-16d2f9c1b8f4",
-      "name": "Jürgen",
-      "surname": "Klopp",
-      "email": "j.klopp@example.com",
+      "name": "Regular",
+      "surname": "User",
+      "email": "user@sportscentral.com",
       "password": "sportscentral",
       "isAdmin": false,
       "events": [
@@ -39,15 +39,6 @@
           "followers": []
         }
       ]
-    },
-    {
-      "id": "15c0a406-b7d3-4c90-b7e7-b98f0f7c9e1e",
-      "email": "w.arantes@sportscentral.com",
-      "name": "Wellington",
-      "surname": "Arantes",
-      "events": [],
-      "isAdmin": true,
-      "password": "sportscentral"
     }
   ],
   "categories": [
