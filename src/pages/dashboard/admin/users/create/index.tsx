@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -22,14 +23,15 @@ import {
   BreadcrumbLink
 } from '@chakra-ui/react';
 
-import { PageLayout } from '@/layout';
-import { useAuth } from '@/contexts';
+import { PLATFORM_SETTINGS } from '@/infra/config';
 import { createUser } from '@/domain/usecases/users/createUser';
 import { UserEntity } from '@/domain/models';
 
+import { PageLayout } from '@/layout';
+
 const registerFormSchema = z
   .object({
-    email: z.string().nonempty('Email is required').email('Invalid Email'),
+    email: z.string().nonempty('Email is required.').email('Invalid Email.'),
     name: z.string().nonempty('Name is required.'),
     surname: z.string().nonempty('Surname is required.'),
     isAdmin: z.string().nonempty('Profile Type is required.'),
@@ -52,7 +54,6 @@ type RegisterFormData = z.infer<typeof registerFormSchema>;
 type NewUserCredentials = Omit<UserEntity, 'events'>;
 
 export default function SignUp() {
-  const { isAuthenticated } = useAuth();
   const { push } = useRouter();
   const toast = useToast();
 
@@ -101,7 +102,7 @@ export default function SignUp() {
 
   return (
     <PageLayout title="Create New User">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -215,3 +216,32 @@ export default function SignUp() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    const parsedCredentials: UserEntity = JSON.parse(credentials);
+
+    if (!parsedCredentials.isAdmin) {
+      return {
+        redirect: {
+          destination: '/dashboard',
+          permanent: false
+        }
+      };
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

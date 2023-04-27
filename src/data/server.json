@@ -39,15 +39,12 @@
           "followers": []
         }
       ]
-
     },
     {
       "id": "15c0a406-b7d3-4c90-b7e7-b98f0f7c9e1e",
-      "name": "Wellington",
-      "surname": "Arantes",
       "email": "w.arantes@sportscentral.com",
-      "password": "sportscentral",
-      "isAdmin": true,
+      "name": "Wellington",
+      "surname": "Teste",
       "events": [
         {
           "id": "e22f1bde-8ab2-449f-8351-76eb9b8aae0a",
@@ -58,8 +55,50 @@
           "endDate": "2023-05-12T22:30:00.000Z",
           "location": "Deutsche Bank Park - Frankfurt, Germany",
           "followers": []
+        },
+        {
+          "id": "733ac139-62e8-4a74-b07c-da258747baa4",
+          "title": "test",
+          "description": "dddd",
+          "category": "football",
+          "startDate": "2023-04-27T02:25:00.000Z",
+          "endDate": "2023-04-28T02:25:00.000Z",
+          "followers": [],
+          "location": "ddd"
         }
-      ]
+      ],
+      "isAdmin": true,
+      "password": "sportscentral"
+    },
+    {
+      "id": "00ef484f-b270-4ebc-af1c-df20616d30ca",
+      "email": "user@sportscentral.com",
+      "name": "Normal",
+      "surname": "User",
+      "events": [
+        {
+          "id": "e22f1bde-8ab2-449f-8351-76eb9b8aae0a",
+          "title": "Borussia Dortmund x Eintracht Frankfurt",
+          "description": "Borussia Dortmund will face off against Eintracht Frankfurt in a highly anticipated football match taking place at the Deutsche Bank Park in Frankfurt, Germany on May 12th, 2023. The game is expected to draw a large crowd of avid football fans from both teams and around the world. With both teams having a strong record, this game is sure to be a thrilling and intense experience for all in attendance.",
+          "category": "football",
+          "startDate": "2023-05-12T20:30:00.000Z",
+          "endDate": "2023-05-12T22:30:00.000Z",
+          "location": "Deutsche Bank Park - Frankfurt, Germany",
+          "followers": []
+        },
+        {
+          "id": "733ac139-62e8-4a74-b07c-da258747baa4",
+          "title": "test",
+          "description": "dddd",
+          "category": "football",
+          "startDate": "2023-04-27T02:25:00.000Z",
+          "endDate": "2023-04-28T02:25:00.000Z",
+          "followers": [],
+          "location": "ddd"
+        }
+      ],
+      "isAdmin": false,
+      "password": "sportscentral"
     }
   ],
   "categories": [
@@ -126,14 +165,20 @@
       "followers": []
     },
     {
-      "id": "8e6936c7-6d2f-4d87-8b4f-3f3ebe11a4f1",
-      "title": "Volleyball Bundesliga Match",
-      "description": "The Volleyball Bundesliga match between Berlin Recycling Volleys and VfB Friedrichshafen is scheduled to take place on October 15th, 2023, at the Max-Schmeling-Halle in Berlin, Germany. This match will be an exciting opportunity for fans to see two of the top teams in the league face off. Fans can expect to see high-energy rallies and impressive displays of athleticism from some of the top volleyball players in Germany.",
-      "category": "volleyball",
-      "startDate": "2023-10-15T19:30:00.000Z",
-      "endDate": "2023-10-15T22:00:00.000Z",
-      "location": "Max-Schmeling-Halle - Berlin, Germany",
-      "followers": []
-      }
+      "id": "733ac139-62e8-4a74-b07c-da258747baa4",
+      "title": "test",
+      "description": "dddd",
+      "category": "football",
+      "startDate": "2023-04-27T02:25:00.000Z",
+      "endDate": "2023-04-28T02:25:00.000Z",
+      "location": "ddd",
+      "followers": [
+        {
+          "id": "15c0a406-b7d3-4c90-b7e7-b98f0f7c9e1e",
+          "name": "Wellington",
+          "surname": "Teste"
+        }
+      ]
+    }
   ]
 }

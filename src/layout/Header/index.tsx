@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
 import {
   Flex,
   HStack,
   Image,
   Tooltip,
   Avatar,
-  Button,
   IconButton,
   Menu,
   MenuButton,
@@ -18,7 +16,6 @@ import { useAuth } from '@/contexts';
 
 export function Header() {
   const { isAuthenticated, credentials, signOut } = useAuth();
-  const { push } = useRouter();
 
   return (
     <Flex

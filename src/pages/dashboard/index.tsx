@@ -1,32 +1,27 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 
+import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
 import { CategoryEntity, EventEntity } from '@/domain/models';
+import { getUserEvents } from '@/domain/usecases/users';
 import { getAllEvents } from '@/domain/usecases/events';
 import { getAllCategories } from '@/domain/usecases/categories';
 
 import { PageLayout, Section } from '@/layout';
-import { CategoryCard, NoCategoriesCard } from '@/components/Categories';
 import { EventCard, NoEventsCard } from '@/components/Event';
-import { getUserEvents } from '@/domain/usecases/users';
+import { CategoryCard, NoCategoriesCard } from '@/components/Categories';
 
 export default function Dashboard() {
-  const { isAuthenticated, credentials } = useAuth();
-  const { push } = useRouter();
+  const { credentials } = useAuth();
 
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
-  const [events, setEvents] = useState<EventEntity[] | null>(null);
   const [subscriptions, setSubscriptions] = useState<EventEntity[] | null>(
     null
   );
+  const [events, setEvents] = useState<EventEntity[] | null>(null);
   const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      push('/sign-in');
-    }
-  }, [isAuthenticated]);
 
   const getSubscriptionsData = async () => {
     if (credentials) {
@@ -70,7 +65,7 @@ export default function Dashboard() {
     if (credentials) {
       getDashboardData();
     }
-  }, []);
+  }, [credentials]);
 
   return (
     <PageLayout title="Dashboard | SportsCentral">
@@ -156,3 +151,21 @@ export default function Dashboard() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (!credentials) {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

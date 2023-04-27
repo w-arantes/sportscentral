@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -21,7 +23,8 @@ import {
   useToast
 } from '@chakra-ui/react';
 
-import { CategoryEntity } from '@/domain/models';
+import { PLATFORM_SETTINGS } from '@/infra/config';
+import { CategoryEntity, UserEntity } from '@/domain/models';
 import { getCategory, updateCategory } from '@/domain/usecases/categories';
 
 import { PageLayout } from '@/layout';
@@ -98,7 +101,7 @@ export default function EditCategory() {
 
   return (
     <PageLayout title="Edit Category | SportsCentral">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -155,3 +158,32 @@ export default function EditCategory() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    const parsedCredentials: UserEntity = JSON.parse(credentials);
+
+    if (!parsedCredentials.isAdmin) {
+      return {
+        redirect: {
+          destination: '/dashboard',
+          permanent: false
+        }
+      };
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

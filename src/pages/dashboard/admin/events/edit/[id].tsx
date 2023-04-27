@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -22,10 +24,12 @@ import {
   useToast
 } from '@chakra-ui/react';
 
-import { PageLayout } from '@/layout';
-import { CategoryEntity, EventEntity } from '@/domain/models';
+import { PLATFORM_SETTINGS } from '@/infra/config';
+import { CategoryEntity, EventEntity, UserEntity } from '@/domain/models';
 import { getAllCategories } from '@/domain/usecases/categories';
 import { getEvent, updateEvent } from '@/domain/usecases/events';
+
+import { PageLayout } from '@/layout';
 
 const updateEventFormSchema = z
   .object({
@@ -39,10 +43,12 @@ const updateEventFormSchema = z
     category: z.string().nonempty('Category is required.'),
     startDate: z
       .string()
+      .nonempty('Start date is required.')
       .transform((value) => new Date(value))
       .transform((value) => value.toISOString()),
     endDate: z
       .string()
+      .nonempty('End date is required.')
       .transform((value) => new Date(value))
       .transform((value) => value.toISOString()),
     location: z
@@ -55,7 +61,7 @@ const updateEventFormSchema = z
       ctx.addIssue({
         code: 'custom',
         path: ['endDate'],
-        message: 'End date must be after start date'
+        message: 'End date must be after start date.'
       });
     }
   });
@@ -142,7 +148,7 @@ export default function EditEvent() {
 
   return (
     <PageLayout title="Edit Event | SportsCentral">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -278,3 +284,32 @@ export default function EditEvent() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    const parsedCredentials: UserEntity = JSON.parse(credentials);
+
+    if (!parsedCredentials.isAdmin) {
+      return {
+        redirect: {
+          destination: '/dashboard',
+          permanent: false
+        }
+      };
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

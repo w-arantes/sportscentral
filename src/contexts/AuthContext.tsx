@@ -87,14 +87,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const clearSession = () => {
+  const clearSession = async () => {
     destroyCookie(undefined, USER_CREDENTIALS_KEY);
     setIsAuthenticated(false);
     setCredentials(null);
   };
 
-  const signOut = () => {
-    clearSession();
+  const signOut = async () => {
+    await clearSession();
+
     push('/sign-in');
   };
 
