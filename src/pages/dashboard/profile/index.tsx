@@ -45,7 +45,7 @@ export default function ProfileSettings() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      push('/login');
+      push('/sign-in');
     }
   }, [isAuthenticated]);
 

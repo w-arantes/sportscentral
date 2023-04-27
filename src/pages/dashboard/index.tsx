@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      push('/login');
+      push('/sign-in');
     }
   }, [isAuthenticated]);
 

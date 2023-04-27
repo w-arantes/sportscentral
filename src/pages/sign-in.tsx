@@ -73,13 +73,12 @@ export default function Login() {
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
-            LOG IN
+            SIGN-IN
           </Text>
         </Center>
 
         <Flex direction="row" align="center" justify="space-between">
           <Text fontSize="h2">NEW TO SPORTSCENTRAL? &nbsp;</Text>
-
           <Link as={NextLink} href="/sign-up">
             <Text
               fontSize="h2"

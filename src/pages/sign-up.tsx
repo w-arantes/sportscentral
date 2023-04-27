@@ -87,7 +87,7 @@ export default function SignUp() {
         isClosable: true
       });
 
-      push('/login');
+      push('/sign-in');
     } else {
       toast({
         title: 'Error',

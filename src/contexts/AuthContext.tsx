@@ -95,7 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signOut = () => {
     clearSession();
-    push('/login');
+    push('/sign-in');
   };
 
   return (

@@ -165,7 +165,7 @@ export default function EventPage({
         height="100%"
       >
         {!isAuthenticated ? (
-          <Button variant="solid" onClick={() => push('/login')}>
+          <Button variant="solid" onClick={() => push('/sign-in')}>
             SIGN-IN TO FOLLOW EVENT
           </Button>
         ) : (
