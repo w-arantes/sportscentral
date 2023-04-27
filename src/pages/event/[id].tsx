@@ -88,7 +88,7 @@ export default function EventPage({
   };
 
   const handleEditEvent = () => {
-    console.log('EDIT EVENT');
+    push(`/dashboard/admin/events/edit/${id}`);
   };
 
   const handleUnfollow = async (eventId: string) => {
