@@ -88,7 +88,7 @@ export default function EventPage({
   };
 
   const handleEditEvent = () => {
-    console.log('EDIT EVENT');
+    push(`/dashboard/admin/events/edit/${id}`);
   };
 
   const handleUnfollow = async (eventId: string) => {
@@ -143,6 +143,7 @@ export default function EventPage({
 
       <Flex direction="column" width="100%" height="320px" mb="2rem">
         <Image
+          data-cy="EventImage"
           src={`/images/categories/${category}.png`}
           alt="Event category image"
           fallbackSrc="/images/categories/default.png"
@@ -165,7 +166,11 @@ export default function EventPage({
         height="100%"
       >
         {!isAuthenticated ? (
-          <Button variant="solid" onClick={() => push('/sign-in')}>
+          <Button
+            data-cy="FollowEventButton"
+            variant="solid"
+            onClick={() => push('/sign-in')}
+          >
             SIGN-IN TO FOLLOW EVENT
           </Button>
         ) : (
@@ -202,7 +207,7 @@ export default function EventPage({
         )}
       </HStack>
 
-      <EventFollowers followers={eventFollowers} />
+      <EventFollowers data-cy="FollowEventButton" followers={eventFollowers} />
     </PageLayout>
   );
 }

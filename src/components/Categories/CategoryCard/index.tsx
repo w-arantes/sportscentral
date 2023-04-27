@@ -7,6 +7,7 @@ import { CategoryTag } from '../CategoryTag';
 export function CategoryCard({ id, name }: CategoryEntity) {
   return (
     <Link
+      data-cy="CategoryCard"
       as={NextLink}
       href={`/events/category/${id}`}
       _hover={{

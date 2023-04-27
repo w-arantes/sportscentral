@@ -4,6 +4,7 @@ import { Flex, Center, Text } from '@chakra-ui/react';
 export function HeroBanner() {
   return (
     <Flex
+      data-cy="HeroBanner"
       direction="row"
       justify="space-between"
       width="100%"
