@@ -3,7 +3,7 @@ const MOCK_CREDENTIALS = {
   password: 'sportscentral'
 };
 
-it('Logs in successfully', () => {
+it('Render the Sign-in page', () => {
   cy.visit('http://localhost:3000/sign-in');
 
   cy.get('input[name="email"]').type(MOCK_CREDENTIALS.email);
