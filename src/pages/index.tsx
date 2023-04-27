@@ -17,7 +17,7 @@ interface LandingPageProps {
 
 export default function LandingPage({ categories, events }: LandingPageProps) {
   return (
-    <PageLayout title="SportsCentral - Made for Sports Lovers" h="100vh">
+    <PageLayout title="SportsCentral - Made for Sports Lovers" height="100vh">
       <HeroBanner />
       <Section title="Categories" height="250px">
         {categories && categories.length > 0 ? (

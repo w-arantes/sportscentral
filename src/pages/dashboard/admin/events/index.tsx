@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
+import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
+
 import {
   Button,
   IconButton,
@@ -19,17 +23,15 @@ import {
   useToast,
   Spinner
 } from '@chakra-ui/react';
-import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
-import { useAuth } from '@/contexts';
-import { EventEntity } from '@/domain/models';
+import { PLATFORM_SETTINGS } from '@/infra/config';
+import { EventEntity, UserEntity } from '@/domain/models';
 import { deleteEvent, getAllEvents } from '@/domain/usecases/events';
 import { formatDate } from '@/helpers';
 
 import { PageLayout } from '@/layout';
 
 export default function ManageEvents() {
-  const { credentials } = useAuth();
   const { push } = useRouter();
   const toast = useToast();
 
@@ -82,7 +84,7 @@ export default function ManageEvents() {
 
   return (
     <PageLayout title="Manage Events | SportsCentral">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -106,8 +108,8 @@ export default function ManageEvents() {
 
       <Flex
         direction="column"
-        w="100%"
-        h="100%"
+        width="100%"
+        height="100%"
         bg="gray.medium"
         mt="2rem"
         p="4rem"
@@ -174,3 +176,32 @@ export default function ManageEvents() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    const parsedCredentials: UserEntity = JSON.parse(credentials);
+
+    if (!parsedCredentials.isAdmin) {
+      return {
+        redirect: {
+          destination: '/dashboard',
+          permanent: false
+        }
+      };
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

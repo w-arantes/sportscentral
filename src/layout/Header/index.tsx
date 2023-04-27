@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router';
 import {
   Flex,
   HStack,
   Image,
   Tooltip,
   Avatar,
-  Button,
   IconButton,
   Menu,
   MenuButton,
@@ -18,7 +16,6 @@ import { useAuth } from '@/contexts';
 
 export function Header() {
   const { isAuthenticated, credentials, signOut } = useAuth();
-  const { push } = useRouter();
 
   return (
     <Flex
@@ -96,18 +93,21 @@ export function Header() {
             />
           </>
         ) : (
-          <>
-            <Tooltip label="Log-in into SportsCentral" openDelay={500}>
-              <Button variant="header" onClick={() => push('/login')}>
-                LOGIN
-              </Button>
-            </Tooltip>
-            <Tooltip label="Sign-in into SportsCentral" openDelay={500}>
-              <Button variant="header" onClick={() => push('/sign-in')}>
-                SIGN-IN
-              </Button>
-            </Tooltip>
-          </>
+          <Menu>
+            <MenuButton>ENTER</MenuButton>
+            <MenuList>
+              <Tooltip label="Sign-in" openDelay={1000}>
+                <MenuItem as="a" href="/sign-in">
+                  SIGN-IN
+                </MenuItem>
+              </Tooltip>
+              <Tooltip label="Sign-in" openDelay={1000}>
+                <MenuItem as="a" href="/sign-up">
+                  SIGN-UP
+                </MenuItem>
+              </Tooltip>
+            </MenuList>
+          </Menu>
         )}
       </HStack>
     </Flex>

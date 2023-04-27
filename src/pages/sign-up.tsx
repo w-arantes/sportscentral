@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,10 +18,11 @@ import {
   useToast
 } from '@chakra-ui/react';
 
-import { PageLayout } from '@/layout';
-import { useAuth } from '@/contexts';
+import { PLATFORM_SETTINGS } from '@/infra/config';
 import { createUser } from '@/domain/usecases/users/createUser';
 import { UserEntity } from '@/domain/models';
+
+import { PageLayout } from '@/layout';
 
 const registerFormSchema = z
   .object({
@@ -43,10 +45,10 @@ const registerFormSchema = z
   });
 
 type RegisterFormData = z.infer<typeof registerFormSchema>;
+
 type NewUserCredentials = Omit<UserEntity, 'events'>;
 
 export default function SignUp() {
-  const { isAuthenticated } = useAuth();
   const { push } = useRouter();
   const toast = useToast();
 
@@ -57,12 +59,6 @@ export default function SignUp() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema)
   });
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      push('/dashboard');
-    }
-  }, [isAuthenticated]);
 
   const onSubmit = async (registerForm: RegisterFormData) => {
     const { name, surname, email, password } = registerForm;
@@ -87,7 +83,7 @@ export default function SignUp() {
         isClosable: true
       });
 
-      push('/login');
+      push('/sign-in');
     } else {
       toast({
         title: 'Error',
@@ -170,6 +166,7 @@ export default function SignUp() {
             {errors.confirmPassword && errors.confirmPassword.message}
           </FormErrorMessage>
         </FormControl>
+
         <Button type="submit" isLoading={isSubmitting} isDisabled={!isDirty}>
           Register
         </Button>
@@ -177,3 +174,21 @@ export default function SignUp() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

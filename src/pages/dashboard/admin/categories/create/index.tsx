@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,11 +21,11 @@ import {
   BreadcrumbLink
 } from '@chakra-ui/react';
 
-import { CategoryEntity } from '@/domain/models';
+import { PLATFORM_SETTINGS } from '@/infra/config';
+import { CategoryEntity, UserEntity } from '@/domain/models';
 import { createCategory } from '@/domain/usecases/categories';
 
 import { PageLayout } from '@/layout';
-import { useAuth } from '@/contexts';
 
 const registerCategoryFormSchema = z.object({
   name: z
@@ -36,7 +38,6 @@ const registerCategoryFormSchema = z.object({
 type RegisterCategoryFormData = z.infer<typeof registerCategoryFormSchema>;
 
 export default function CreateCategory() {
-  const { isAuthenticated } = useAuth();
   const { push } = useRouter();
   const toast = useToast();
 
@@ -79,7 +80,7 @@ export default function CreateCategory() {
 
   return (
     <PageLayout title="Create New Category">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -132,3 +133,32 @@ export default function CreateCategory() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    const parsedCredentials: UserEntity = JSON.parse(credentials);
+
+    if (!parsedCredentials.isAdmin) {
+      return {
+        redirect: {
+          destination: '/dashboard',
+          permanent: false
+        }
+      };
+    }
+  } else {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

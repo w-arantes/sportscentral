@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,8 +20,10 @@ import {
   useToast
 } from '@chakra-ui/react';
 
-import { PageLayout } from '@/layout';
 import { useAuth } from '@/contexts';
+import { PLATFORM_SETTINGS } from '@/infra/config';
+
+import { PageLayout } from '@/layout';
 
 const loginFormSchema = z.object({
   email: z.string().nonempty('E-mail is required.').email('Invalid E-mail.'),
@@ -33,15 +36,9 @@ const loginFormSchema = z.object({
 type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function Login() {
-  const { signIn, isAuthenticated } = useAuth();
+  const { signIn } = useAuth();
   const { push } = useRouter();
   const toast = useToast();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      push('/dashboard');
-    }
-  }, [isAuthenticated]);
 
   const {
     register,
@@ -69,17 +66,16 @@ export default function Login() {
   };
 
   return (
-    <PageLayout title="Login">
+    <PageLayout title="Sign-in">
       <Stack direction="column" spacing="1rem" mb="2rem">
         <Center>
           <Text fontSize="title" color="white" fontWeight="bold">
-            LOG IN
+            SIGN-IN
           </Text>
         </Center>
 
         <Flex direction="row" align="center" justify="space-between">
           <Text fontSize="h2">NEW TO SPORTSCENTRAL? &nbsp;</Text>
-
           <Link as={NextLink} href="/sign-up">
             <Text
               fontSize="h2"
@@ -126,3 +122,21 @@ export default function Login() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (credentials) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

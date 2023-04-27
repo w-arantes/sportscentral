@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,8 +19,10 @@ import {
   useToast
 } from '@chakra-ui/react';
 
-import { PageLayout } from '@/layout';
+import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
+
+import { PageLayout } from '@/layout';
 
 const userCredentialsFormSchema = z.object({
   name: z.string().nonempty('Name is required.'),
@@ -31,8 +33,7 @@ const userCredentialsFormSchema = z.object({
 type ProfileFormData = z.infer<typeof userCredentialsFormSchema>;
 
 export default function ProfileSettings() {
-  const { isAuthenticated, credentials, updateProfileData } = useAuth();
-  const { push } = useRouter();
+  const { credentials, updateProfileData } = useAuth();
   const toast = useToast();
 
   const {
@@ -42,12 +43,6 @@ export default function ProfileSettings() {
   } = useForm<ProfileFormData>({
     resolver: zodResolver(userCredentialsFormSchema)
   });
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      push('/login');
-    }
-  }, [isAuthenticated]);
 
   const onSubmit = async (newData: ProfileFormData) => {
     const { email, name, surname } = newData;
@@ -87,7 +82,7 @@ export default function ProfileSettings() {
 
   return (
     <PageLayout title="Profile Settings | SportsCentral">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -151,3 +146,21 @@ export default function ProfileSettings() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (!credentials) {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};

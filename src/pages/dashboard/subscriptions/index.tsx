@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { parseCookies } from 'nookies';
 
+import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
 import { EventEntity } from '@/domain/models';
 import { getUserEvents } from '@/domain/usecases/users';
@@ -15,8 +17,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function Subscriptions() {
-  const { isAuthenticated, credentials } = useAuth();
-  const { push } = useRouter();
+  const { credentials } = useAuth();
 
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
   const [subscriptions, setSubscriptions] = useState<EventEntity[] | null>(
@@ -40,11 +41,11 @@ export default function Subscriptions() {
       setIsFetchingData(true);
       getSubscriptionsData();
     }
-  }, []);
+  }, [credentials]);
 
   return (
     <PageLayout title="User Subscriptions">
-      <Flex align="center" justify="flex-start" w="100%" h="56px">
+      <Flex align="center" justify="flex-start" width="100%" height="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -87,3 +88,21 @@ export default function Subscriptions() {
     </PageLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies: string = PLATFORM_SETTINGS.cookies.USER_CREDENTIALS_KEY;
+  const { [cookies]: credentials } = parseCookies(ctx);
+
+  if (!credentials) {
+    return {
+      redirect: {
+        destination: '/sign-in',
+        permanent: false
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+};
