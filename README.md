@@ -73,6 +73,20 @@ CATEGORIES MANAGEMENT
 - `/dashboard/admin/categories/create` — Register a new category.
 - `/dashboard/admin/categories/edit/:id` — Edit categories.
 
+## Sign-in Credentials
+
+**Admin user**
+```
+email: admin@sportscentral.com
+password: sportscentral
+```
+
+**Regular user**  
+```
+email: user@sportscentral.com
+password: sportscentral
+```
+
 ## Documentation
 ### Application Directory Structure
 
