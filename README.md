@@ -7,7 +7,7 @@
 
 ## About
 
-<p>SportsCentral is is a sporting events platform that allows fans to register for sporting events, view details and information, and keep up with all event updates.</p>
+<p>SportsCentral is a sporting events platform that allows fans to register for sporting events, view details, information, and keep up with all event updates.</p>
 
 https://sportscentral.vercel.app/
 
