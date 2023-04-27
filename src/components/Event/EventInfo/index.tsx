@@ -18,6 +18,7 @@ export function EventInfo({
 }: EventInfoProps) {
   return (
     <Flex
+      data-cy="EventInfo"
       direction="column"
       w="100%"
       h="100%"
@@ -26,21 +27,31 @@ export function EventInfo({
       mb="2rem"
     >
       <VStack spacing="1rem" align="flex-start">
-        <Text fontSize="title" fontWeight="bold" color="white">
+        <Text
+          data-cy="EventTitle"
+          fontSize="title"
+          fontWeight="bold"
+          color="white"
+        >
           {title}
         </Text>
-        <Flex direction="row" align="center" justify="flex-start">
+        <Flex
+          data-cy="EventCategory"
+          direction="row"
+          align="center"
+          justify="flex-start"
+        >
           <CategoryTag name={category} />
         </Flex>
         <Flex direction="row" align="center" justify="flex-start">
           <CalendarBlank size={20} color="#00875F" />
-          <Text fontSize="h1" ml="0.5rem">
+          <Text data-cy="EventDate" fontSize="h1" ml="0.5rem">
             {date}
           </Text>
         </Flex>
         <Flex direction="row" align="center" justify="flex-start">
           <MapPin size={20} color="#00875F" />
-          <Text fontSize="h1" ml="0.5rem">
+          <Text data-cy="EventLocation" fontSize="h1" ml="0.5rem">
             {location}
           </Text>
         </Flex>

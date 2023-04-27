@@ -25,6 +25,7 @@ export function EventCard({
     >
       <Tooltip label="Click to show event details" openDelay={500}>
         <Flex
+          data-cy="EventCard"
           direction="column"
           minWidth="296px"
           height="340px"

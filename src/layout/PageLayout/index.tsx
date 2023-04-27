@@ -14,6 +14,7 @@ export function PageLayout({ children, title, ...rest }: PageLayoutProps) {
 
   return (
     <Flex
+      data-cy="LandingPage"
       as="main"
       direction="column"
       align="center"

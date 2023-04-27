@@ -19,7 +19,7 @@ export default function LandingPage({ categories, events }: LandingPageProps) {
   return (
     <PageLayout title="SportsCentral - Made for Sports Lovers" height="100vh">
       <HeroBanner />
-      <Section title="Categories" height="250px">
+      <Section title="Categories" height="250px" data-cy="CategoriesSection">
         {categories && categories.length > 0 ? (
           <>
             {categories?.map((category: CategoryEntity) => {
@@ -36,7 +36,7 @@ export default function LandingPage({ categories, events }: LandingPageProps) {
           <NoCategoriesCard />
         )}
       </Section>
-      <Section title="Events" footerLink url="/events">
+      <Section title="Events" footerLink url="/events" data-cy="EventsSection">
         {events && events.length > 0 ? (
           <>
             {events?.map((event: EventEntity) => {
