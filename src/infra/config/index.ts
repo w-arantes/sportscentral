@@ -13,12 +13,23 @@ interface PlatformSettingsProps {
   ssr: {
     pages: {
       HOMEPAGE_REVALIDATION: number;
-      EVENTS_REVALIDATION: number;
-      EVENT_REVALIDATION: number;
-      EVENTS_BY_CATEGORY_REVALIDATION: number;
+      EVENTS: {
+        REVALIDATION: number;
+        FALLBACK: boolean | 'blocking';
+      };
+      EVENT: {
+        REVALIDATION: number;
+        FALLBACK: boolean | 'blocking';
+      };
+      EVENTS_BY_CATEGORY: {
+        REVALIDATION: number;
+        FALLBACK: boolean | 'blocking';
+      };
     };
   };
 }
+
+const DEFAULT_TIME = 60 * 60 * 4; //4 hours;
 
 export const PLATFORM_SETTINGS: PlatformSettingsProps = {
   cookies: {
@@ -27,10 +38,19 @@ export const PLATFORM_SETTINGS: PlatformSettingsProps = {
   },
   ssr: {
     pages: {
-      HOMEPAGE_REVALIDATION: 60 * 60 * 12, // 12 hours
-      EVENTS_REVALIDATION: 60 * 60 * 12, // 12 hours
-      EVENT_REVALIDATION: 60 * 60 * 12, // 12 hours
-      EVENTS_BY_CATEGORY_REVALIDATION: 60 * 60 * 12 // 12 hours
+      HOMEPAGE_REVALIDATION: DEFAULT_TIME,
+      EVENT: {
+        FALLBACK: 'blocking',
+        REVALIDATION: DEFAULT_TIME
+      },
+      EVENTS: {
+        FALLBACK: 'blocking',
+        REVALIDATION: DEFAULT_TIME
+      },
+      EVENTS_BY_CATEGORY: {
+        FALLBACK: 'blocking',
+        REVALIDATION: DEFAULT_TIME
+      }
     }
   }
 };

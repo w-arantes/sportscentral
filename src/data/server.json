@@ -7,7 +7,18 @@
       "email": "j.klopp@example.com",
       "password": "sportscentral",
       "isAdmin": false,
-      "events": []
+      "events": [
+        {
+          "id": "e22f1bde-8ab2-449f-8351-76eb9b8aae0a",
+          "title": "Borussia Dortmund x Eintracht Frankfurt",
+          "description": "Borussia Dortmund will face off against Eintracht Frankfurt in a highly anticipated football match taking place at the Deutsche Bank Park in Frankfurt, Germany on May 12th, 2023. The game is expected to draw a large crowd of avid football fans from both teams and around the world. With both teams having a strong record, this game is sure to be a thrilling and intense experience for all in attendance.",
+          "category": "football",
+          "startDate": "2023-05-12T20:30:00.000Z",
+          "endDate": "2023-05-12T22:30:00.000Z",
+          "location": "Deutsche Bank Park - Frankfurt, Germany",
+          "followers": []
+        }
+      ]
     },
     {
       "id": "c6d677a6-76a6-4b1b-a74c-57dd7b2600cc",
@@ -16,7 +27,18 @@
       "email": "admin@sportscentral.com",
       "password": "sportscentral",
       "isAdmin": true,
-      "events": []
+      "events": [
+        {
+          "id": "e22f1bde-8ab2-449f-8351-76eb9b8aae0a",
+          "title": "Borussia Dortmund x Eintracht Frankfurt",
+          "description": "Borussia Dortmund will face off against Eintracht Frankfurt in a highly anticipated football match taking place at the Deutsche Bank Park in Frankfurt, Germany on May 12th, 2023. The game is expected to draw a large crowd of avid football fans from both teams and around the world. With both teams having a strong record, this game is sure to be a thrilling and intense experience for all in attendance.",
+          "category": "football",
+          "startDate": "2023-05-12T20:30:00.000Z",
+          "endDate": "2023-05-12T22:30:00.000Z",
+          "location": "Deutsche Bank Park - Frankfurt, Germany",
+          "followers": []
+        }
+      ]
 
     },
     {
@@ -26,7 +48,18 @@
       "email": "w.arantes@sportscentral.com",
       "password": "sportscentral",
       "isAdmin": true,
-      "events": []
+      "events": [
+        {
+          "id": "e22f1bde-8ab2-449f-8351-76eb9b8aae0a",
+          "title": "Borussia Dortmund x Eintracht Frankfurt",
+          "description": "Borussia Dortmund will face off against Eintracht Frankfurt in a highly anticipated football match taking place at the Deutsche Bank Park in Frankfurt, Germany on May 12th, 2023. The game is expected to draw a large crowd of avid football fans from both teams and around the world. With both teams having a strong record, this game is sure to be a thrilling and intense experience for all in attendance.",
+          "category": "football",
+          "startDate": "2023-05-12T20:30:00.000Z",
+          "endDate": "2023-05-12T22:30:00.000Z",
+          "location": "Deutsche Bank Park - Frankfurt, Germany",
+          "followers": []
+        }
+      ]
     }
   ],
   "categories": [

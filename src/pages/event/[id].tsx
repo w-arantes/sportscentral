@@ -218,7 +218,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true
+    fallback: PLATFORM_SETTINGS.ssr.pages.EVENT.FALLBACK
   };
 };
 
@@ -230,6 +230,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       ...event
     },
-    revalidate: PLATFORM_SETTINGS.ssr.pages.EVENT_REVALIDATION
+    revalidate: PLATFORM_SETTINGS.ssr.pages.EVENT.REVALIDATION
   };
 };

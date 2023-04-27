@@ -71,6 +71,6 @@ export const getStaticProps: GetStaticProps = async () => {
       events,
       categories
     },
-    revalidate: PLATFORM_SETTINGS.ssr.pages.EVENTS_REVALIDATION
+    revalidate: PLATFORM_SETTINGS.ssr.pages.EVENTS.REVALIDATION
   };
 };
