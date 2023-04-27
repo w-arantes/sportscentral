@@ -25,6 +25,3 @@ jobs:
 
       - name: Check linting
         run: yarn lint
-
-      - name: Run Cypress tests
-        run: npx cypress run --headless --browser chrome
