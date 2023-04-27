@@ -27,22 +27,38 @@ import { CategoryEntity, EventEntity } from '@/domain/models';
 import { getAllCategories } from '@/domain/usecases/categories';
 import { getEvent, updateEvent } from '@/domain/usecases/events';
 
-const updateEventFormSchema = z.object({
-  title: z
-    .string()
-    .nonempty('Event title is required.')
-    .max(39, 'The title must contain a maximum of 39 characters.'),
-  description: z
-    .string()
-    .max(140, 'The description must contain a maximum of 140 characters.'),
-  category: z.string().nonempty('Category is required.'),
-  startDate: z.string().nonempty('Start date is required.'),
-  endDate: z.string().nonempty('End date is required.'),
-  location: z
-    .string()
-    .nonempty('Event location is required.')
-    .max(39, 'The location must contain a maximum of 39 characters.')
-});
+const updateEventFormSchema = z
+  .object({
+    title: z
+      .string()
+      .nonempty('Event title is required.')
+      .max(39, 'The title must contain a maximum of 39 characters.'),
+    description: z
+      .string()
+      .max(140, 'The description must contain a maximum of 140 characters.'),
+    category: z.string().nonempty('Category is required.'),
+    startDate: z
+      .string()
+      .transform((value) => new Date(value))
+      .transform((value) => value.toISOString()),
+    endDate: z
+      .string()
+      .transform((value) => new Date(value))
+      .transform((value) => value.toISOString()),
+    location: z
+      .string()
+      .nonempty('Event location is required.')
+      .max(39, 'The location must contain a maximum of 39 characters.')
+  })
+  .superRefine(({ startDate, endDate }, ctx) => {
+    if (startDate >= endDate) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['endDate'],
+        message: 'End date must be after start date'
+      });
+    }
+  });
 
 type UpdateEventFormData = z.infer<typeof updateEventFormSchema>;
 

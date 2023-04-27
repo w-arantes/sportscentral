@@ -14,19 +14,21 @@ import {
   Flex
 } from '@chakra-ui/react';
 
-export default function FollowingEvents() {
+export default function Subscriptions() {
   const { isAuthenticated, credentials } = useAuth();
   const { push } = useRouter();
 
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
-  const [following, setFollowing] = useState<EventEntity[] | null>(null);
+  const [subscriptions, setSubscriptions] = useState<EventEntity[] | null>(
+    null
+  );
 
-  const getFollowingData = async () => {
+  const getSubscriptionsData = async () => {
     if (credentials) {
       const response = await getUserEvents(credentials?.id);
 
       if (response) {
-        setFollowing(response);
+        setSubscriptions(response);
       }
 
       setIsFetchingData(false);
@@ -36,26 +38,20 @@ export default function FollowingEvents() {
   useEffect(() => {
     if (credentials) {
       setIsFetchingData(true);
-      getFollowingData();
+      getSubscriptionsData();
     }
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      push('/login');
-    }
-  }, [isAuthenticated]);
-
   return (
-    <PageLayout title="All Subscriptions">
+    <PageLayout title="User Subscriptions">
       <Flex align="center" justify="flex-start" w="100%" h="56px">
         <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
-            <BreadcrumbLink href={'/dashboard/following'}>
-              Following
+            <BreadcrumbLink href={'/dashboard/subscriptions'}>
+              Subscriptions
             </BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
@@ -65,11 +61,11 @@ export default function FollowingEvents() {
         title="All Subscriptions"
         isLoading={isFetchingData}
         showTotal
-        total={following && following.length}
+        total={subscriptions && subscriptions.length}
       >
-        {following && following.length > 0 ? (
+        {subscriptions && subscriptions.length > 0 ? (
           <>
-            {following?.map((event: EventEntity) => {
+            {subscriptions?.map((event: EventEntity) => {
               return (
                 <EventCard
                   key={event.id}

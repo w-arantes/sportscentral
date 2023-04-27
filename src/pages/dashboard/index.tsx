@@ -17,7 +17,9 @@ export default function Dashboard() {
 
   const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
   const [events, setEvents] = useState<EventEntity[] | null>(null);
-  const [following, setFollowing] = useState<EventEntity[] | null>(null);
+  const [subscriptions, setSubscriptions] = useState<EventEntity[] | null>(
+    null
+  );
   const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
 
   useEffect(() => {
@@ -26,12 +28,12 @@ export default function Dashboard() {
     }
   }, [isAuthenticated]);
 
-  const getFollowingData = async () => {
+  const getSubscriptionsData = async () => {
     if (credentials) {
       const response = await getUserEvents(credentials?.id);
 
       if (response) {
-        setFollowing(response);
+        setSubscriptions(response);
       }
     }
   };
@@ -56,7 +58,7 @@ export default function Dashboard() {
     setIsFetchingData(true);
 
     Promise.all([
-      getFollowingData(),
+      getSubscriptionsData(),
       getEventsData(),
       getCategoriesData()
     ]).finally(() => {
@@ -73,16 +75,16 @@ export default function Dashboard() {
   return (
     <PageLayout title="Dashboard | SportsCentral">
       <Section
-        title="Following"
+        title="Subscriptions"
         isLoading={isFetchingData}
-        footerLink={following && following.length > 0 ? true : false}
-        url="/dashboard/following"
+        footerLink={subscriptions && subscriptions.length > 0 ? true : false}
+        url="/dashboard/subscriptions"
         showTotal
-        total={following && following.length}
+        total={subscriptions && subscriptions.length}
       >
-        {following && following.length > 0 ? (
+        {subscriptions && subscriptions.length > 0 ? (
           <>
-            {following?.map((event: EventEntity) => {
+            {subscriptions?.map((event: EventEntity) => {
               return (
                 <EventCard
                   key={event.id}
@@ -98,7 +100,7 @@ export default function Dashboard() {
             })}
           </>
         ) : (
-          <NoEventsCard message="No following events to show" />
+          <NoEventsCard />
         )}
       </Section>
       <Section

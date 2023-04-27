@@ -15,20 +15,22 @@ import {
   Tooltip,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink
+  BreadcrumbLink,
+  useToast,
+  Spinner
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
 import { useAuth } from '@/contexts';
 import { CategoryEntity } from '@/domain/models';
-import { deleteEvent } from '@/domain/usecases/events';
-import { getAllCategories } from '@/domain/usecases/categories';
+import { deleteCategory, getAllCategories } from '@/domain/usecases/categories';
 
 import { PageLayout } from '@/layout';
 
 export default function ManageCategories() {
   const { credentials } = useAuth();
   const { push } = useRouter();
+  const toast = useToast();
 
   const [categories, setCategories] = useState<CategoryEntity[] | null>(null);
 
@@ -41,28 +43,40 @@ export default function ManageCategories() {
   };
 
   useEffect(() => {
-    if (!credentials?.isAdmin) {
-      push('/dashboard');
-    }
-  }, [credentials]);
-
-  useEffect(() => {
     getCategoriesData();
   }, []);
 
   const handleRegisterNew = () => {
-    console.log('handleRegisterNew');
+    push('/dashboard/admin/categories/create');
   };
 
-  const handleEditCategory = () => {
-    console.log('handleEditEvent');
+  const handleEditCategory = (categoryId: string) => {
+    push(`/dashboard/admin/categories/edit/${categoryId}`);
   };
 
   const handleDeleteCategory = async (eventId: string) => {
-    const response = deleteEvent(eventId);
-    console.log(response);
+    const { status } = await deleteCategory(eventId);
 
-    getCategoriesData();
+    if (status === 200) {
+      getCategoriesData();
+
+      toast({
+        title: 'Success',
+        description: 'Category deleted with success.',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Error',
+        description:
+          'Unable to delete the category, try again or contact support.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+    }
   };
 
   return (
@@ -91,59 +105,70 @@ export default function ManageCategories() {
 
       <Flex
         direction="column"
-        w="100%"
-        h="100%"
+        width="100%"
+        height="100%"
         bg="gray.medium"
         mt="2rem"
         p="4rem"
       >
-        <Flex direction="row" align="center" justify="space-between">
-          <Text color="white">All Categories: {categories?.length}</Text>
-          <Button onClick={handleRegisterNew}>NEW CATEGORY</Button>
-        </Flex>
+        {categories && categories.length > 0 ? (
+          <>
+            <Flex direction="row" align="center" justify="space-between">
+              <Text color="white">All Categories: {categories?.length}</Text>
+              <Button onClick={handleRegisterNew}>NEW CATEGORY</Button>
+            </Flex>
 
-        <TableContainer mt="2rem">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th color="gray.light">Id</Th>
-                <Th color="gray.light">Name</Th>
-                <Th color="gray.light">Actions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {categories &&
-                categories.map((category: CategoryEntity) => {
-                  return (
-                    <Tr key={category.id}>
-                      <Td>{category?.id}</Td>
-                      <Td>{category?.name}</Td>
-                      <Td>
-                        <Tooltip label="Edit Category" openDelay={500}>
-                          <IconButton
-                            variant="unstyled"
-                            size="md"
-                            aria-label="Edit Category"
-                            icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={handleEditCategory}
-                          />
-                        </Tooltip>
-                        <Tooltip label="Delete Category" openDelay={500}>
-                          <IconButton
-                            variant="unstyled"
-                            size="md"
-                            aria-label="Delete Category"
-                            icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={() => handleDeleteCategory(category?.id)}
-                          />
-                        </Tooltip>
-                      </Td>
-                    </Tr>
-                  );
-                })}
-            </Tbody>
-          </Table>
-        </TableContainer>
+            <TableContainer mt="2rem">
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th color="gray.light">Id</Th>
+                    <Th color="gray.light">Name</Th>
+                    <Th color="gray.light">Actions</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <>
+                    {categories.map((category: CategoryEntity) => {
+                      return (
+                        <Tr key={category.id}>
+                          <Td>{category.id}</Td>
+                          <Td>{category.name}</Td>
+                          <Td width="120px">
+                            <Tooltip label="Edit Category" openDelay={500}>
+                              <IconButton
+                                variant="unstyled"
+                                size="md"
+                                aria-label="Edit Category"
+                                icon={
+                                  <PencilSimple size={20} color="#00B37E" />
+                                }
+                                onClick={() => handleEditCategory(category.id)}
+                              />
+                            </Tooltip>
+                            <Tooltip label="Delete Category" openDelay={500}>
+                              <IconButton
+                                variant="unstyled"
+                                size="md"
+                                aria-label="Delete Category"
+                                icon={<TrashSimple size={20} color="#F75A68" />}
+                                onClick={() =>
+                                  handleDeleteCategory(category.id)
+                                }
+                              />
+                            </Tooltip>
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                  </>
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
+        ) : (
+          <Spinner />
+        )}
       </Flex>
     </PageLayout>
   );

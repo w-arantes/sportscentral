@@ -16,13 +16,15 @@ import {
   useToast,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink
+  BreadcrumbLink,
+  Spinner
 } from '@chakra-ui/react';
 import { TrashSimple, PencilSimple } from '@phosphor-icons/react';
 
 import { useAuth } from '@/contexts';
 import { UserEntity } from '@/domain/models';
 import { getAllUsers, deleteUser } from '@/domain/usecases/users';
+
 import { PageLayout } from '@/layout';
 
 export default function ManageUsers() {
@@ -109,59 +111,64 @@ export default function ManageUsers() {
         mt="2rem"
         p="4rem"
       >
-        <Flex direction="row" align="center" justify="space-between">
-          <Text color="white">All Users: {users?.length}</Text>
-          <Button onClick={handleRegisterNew}>NEW USER</Button>
-        </Flex>
+        {users && users.length > 0 ? (
+          <>
+            <Flex direction="row" align="center" justify="space-between">
+              <Text color="white">All Users: {users?.length}</Text>
+              <Button onClick={handleRegisterNew}>NEW USER</Button>
+            </Flex>
 
-        <TableContainer mt="2rem">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th color="gray.light">Id</Th>
-                <Th color="gray.light">Name</Th>
-                <Th color="gray.light">Surname</Th>
-                <Th color="gray.light">Admin Features</Th>
-                <Th color="gray.light">E-mail</Th>
-                <Th color="gray.light">Actions</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {users &&
-                users.map((user: UserEntity) => {
-                  return (
-                    <Tr key={user.id}>
-                      <Td>{user?.id}</Td>
-                      <Td>{user?.name}</Td>
-                      <Td>{user?.surname}</Td>
-                      <Td>{user?.isAdmin ? 'Yes' : 'No'}</Td>
-                      <Td>{user?.email}</Td>
-                      <Td>
-                        <Tooltip label="Edit User" openDelay={500}>
-                          <IconButton
-                            variant="unstyled"
-                            size="md"
-                            aria-label="Edit User"
-                            icon={<PencilSimple size={20} color="#00B37E" />}
-                            onClick={() => handleEditUser(user?.id)}
-                          />
-                        </Tooltip>
-                        <Tooltip label="Delete User" openDelay={500}>
-                          <IconButton
-                            variant="unstyled"
-                            size="md"
-                            aria-label="Delete User"
-                            icon={<TrashSimple size={20} color="#F75A68" />}
-                            onClick={() => handleDeleteUser(user?.id)}
-                          />
-                        </Tooltip>
-                      </Td>
-                    </Tr>
-                  );
-                })}
-            </Tbody>
-          </Table>
-        </TableContainer>
+            <TableContainer mt="2rem">
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th color="gray.light">Id</Th>
+                    <Th color="gray.light">Name</Th>
+                    <Th color="gray.light">Surname</Th>
+                    <Th color="gray.light">Admin Features</Th>
+                    <Th color="gray.light">E-mail</Th>
+                    <Th color="gray.light">Actions</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {users.map((user: UserEntity) => {
+                    return (
+                      <Tr key={user.id}>
+                        <Td>{user.id}</Td>
+                        <Td>{user.name}</Td>
+                        <Td>{user.surname}</Td>
+                        <Td>{user.isAdmin ? 'Yes' : 'No'}</Td>
+                        <Td>{user.email}</Td>
+                        <Td>
+                          <Tooltip label="Edit User" openDelay={500}>
+                            <IconButton
+                              variant="unstyled"
+                              size="md"
+                              aria-label="Edit User"
+                              icon={<PencilSimple size={20} color="#00B37E" />}
+                              onClick={() => handleEditUser(user.id)}
+                            />
+                          </Tooltip>
+                          <Tooltip label="Delete User" openDelay={500}>
+                            <IconButton
+                              variant="unstyled"
+                              size="md"
+                              aria-label="Delete User"
+                              icon={<TrashSimple size={20} color="#F75A68" />}
+                              onClick={() => handleDeleteUser(user.id)}
+                            />
+                          </Tooltip>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
+        ) : (
+          <Spinner />
+        )}
       </Flex>
     </PageLayout>
   );

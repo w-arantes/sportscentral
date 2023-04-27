@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import { Button, Flex, HStack, Img, useToast } from '@chakra-ui/react';
+import { Button, Flex, HStack, useToast, Image } from '@chakra-ui/react';
 
 import { PLATFORM_SETTINGS } from '@/infra/config';
 import { useAuth } from '@/contexts';
@@ -141,13 +141,13 @@ export default function EventPage({
     <PageLayout title={`${title} - Event Page | SportsCentral`}>
       <EventBreadcrumb id={id} title={title} category={category} />
 
-      <Flex direction="column" w="100%" h="320px">
-        <Img
+      <Flex direction="column" width="100%" height="320px" mb="2rem">
+        <Image
           src={`/images/categories/${category}.png`}
           alt="Event category image"
-          w="608px"
-          h="320px"
-          objectFit="cover"
+          fallbackSrc="/images/categories/default.png"
+          width="608px"
+          height="320px"
         />
       </Flex>
       <EventInfo
@@ -161,8 +161,8 @@ export default function EventPage({
         spacing="2rem"
         align="flex-start"
         justify="flex-start"
-        w="100%"
-        h="100%"
+        width="100%"
+        height="100%"
       >
         {!isAuthenticated ? (
           <Button variant="solid" onClick={() => push('/login')}>

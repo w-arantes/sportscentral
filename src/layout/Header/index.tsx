@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import {
   Flex,
   HStack,
-  Img,
+  Image,
   Tooltip,
   Avatar,
   Button,
@@ -34,7 +34,7 @@ export function Header() {
       left="0"
       right="0"
     >
-      <Img
+      <Image
         src="/branding/logo.svg"
         alt="Logo composed with the company name and icon"
         w="200px"
@@ -52,7 +52,7 @@ export function Header() {
                   </MenuItem>
                 </Tooltip>
                 <Tooltip label="Manage Events" openDelay={1000}>
-                  <MenuItem as="a" href="/dashboard/following">
+                  <MenuItem as="a" href="/dashboard/subscriptions">
                     SUBSCRIPTIONS
                   </MenuItem>
                 </Tooltip>
@@ -96,11 +96,18 @@ export function Header() {
             />
           </>
         ) : (
-          <Tooltip label="Log-in into SportsCentral" openDelay={500}>
-            <Button variant="header" onClick={() => push('/login')}>
-              LOGIN
-            </Button>
-          </Tooltip>
+          <>
+            <Tooltip label="Log-in into SportsCentral" openDelay={500}>
+              <Button variant="header" onClick={() => push('/login')}>
+                LOGIN
+              </Button>
+            </Tooltip>
+            <Tooltip label="Sign-in into SportsCentral" openDelay={500}>
+              <Button variant="header" onClick={() => push('/sign-in')}>
+                SIGN-IN
+              </Button>
+            </Tooltip>
+          </>
         )}
       </HStack>
     </Flex>
