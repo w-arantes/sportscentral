@@ -39,6 +39,7 @@ export function EventCard({
         >
           <Box width="100%" height="160px">
             <Image
+              data-cy="EventImage"
               src={`/images/categories/${category}.png`}
               alt={`Event category default image - ${category}`}
               fallbackSrc="/images/categories/default.png"
@@ -54,7 +55,12 @@ export function EventCard({
             px="6px"
             mt="6px"
           >
-            <Text fontSize="h2" fontWeight="bold" color="white">
+            <Text
+              data-cy="EventTitle"
+              fontSize="h2"
+              fontWeight="bold"
+              color="white"
+            >
               {title}
             </Text>
             <Flex direction="row" align="center" justify="flex-start">
@@ -65,7 +71,7 @@ export function EventCard({
             </Flex>
             <Flex direction="row" align="center" justify="flex-start">
               <MapPin size={20} color="#00875F" />
-              <Text fontSize="h3" ml="0.5rem">
+              <Text data-cy="EventDescription" fontSize="h3" ml="0.5rem">
                 {location}
               </Text>
             </Flex>

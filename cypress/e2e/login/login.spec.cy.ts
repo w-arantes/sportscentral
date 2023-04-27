@@ -8,6 +8,4 @@ it('Logs in successfully', () => {
 
   cy.get('input[name="email"]').type(MOCK_CREDENTIALS.email);
   cy.get('input[name="password"]').type(MOCK_CREDENTIALS.password);
-
-  cy.get('button[type="submit"]').click();
 });

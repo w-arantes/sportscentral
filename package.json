@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "cypress": "cypress open",
+    "test:components": "cypress run --spec \"cypress/integration/components/**/*.cy.tsx\"",
     "type-check": "tsc --noEmit",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write",

@@ -20,6 +20,7 @@ export function Header() {
   return (
     <Flex
       as="header"
+      data-cy="Header"
       bg="gray.medium"
       justify="space-between"
       align="center"
@@ -32,6 +33,7 @@ export function Header() {
       right="0"
     >
       <Image
+        data-cy="HeaderImage"
         src="/branding/logo.svg"
         alt="Logo composed with the company name and icon"
         w="200px"
