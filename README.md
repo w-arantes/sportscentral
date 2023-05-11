@@ -141,19 +141,6 @@ import { Button } from '@/components/Button';
 // To import images or other files from the public folder
 import avatar from '@/public/avatar.png';
 ```
-## Final considerations
+## About this project
 
-The conception of the application was based on the creation of the product 'SportsCentral' and meeting the requirements of the provided document.
-
-Some important points can be taken into consideration according to the evolution of the application, such as security in user authentication, accessibility factors, responsiveness and performance with use, and an API with real data.
-
-The following are the areas of improvement that can be focused on the SportsCentral application:
-
-- Writing Detailed Tests (e2e and unitary, consuming a real-data API)
-
-- Improving Performance with Caching Libraries (React Query / RTK)
-
-- Increasing Security in API Requests and Login (JWT / Basic Auth)
-
-
-Thank you for the opportunity to create such a cool project and I look forward to technical feedback on the application.
+The conception of the application was based on the creation of the product 'SportsCentral' and meeting the requirements in a code challenge.
